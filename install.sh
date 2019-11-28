@@ -1,6 +1,5 @@
 #!/bin/bash
 
-cd microfaune_annotator
 
 echo -e "\e[1;96mDelete current database"
 rm -f db.sqlite3
