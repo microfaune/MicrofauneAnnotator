@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h1> Active projects </h1>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Audio tracks</th>
+      <th scope="col">Annotated</th>
+      <th scope="col">Reviewed</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for project in projects %}
+    <tr>
+      <td><a href="{% url 'project_homepage' project_id=project.id %}"> {{ project.name }}</a></td>
+      <td>{{ project.audiotrack_count }}</td>
+      <td>{{ project.annotation_count }}</td>
+      <td>{{ project.review_count }}</td>
+    </tr>
+
+    {% endfor %}
+
+
+  </tbody>
+
+</table>
+
+{% endblock %}
