@@ -361,7 +361,7 @@ function main() {
 
     var blob = null;
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", `http://${baseURL}/media/${filename}.wav`);
+    xhr.open("GET", `https://${baseURL}/media/${filename}.wav`);
     xhr.responseType = "blob";
     xhr.onload = function() {
         console.log('onload');
