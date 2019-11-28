@@ -353,12 +353,15 @@ function fileToJSON(file) {
 
 function main() {
     const filename = document.querySelector('.filename').innerHTML.split('/')[2].split('.')[0];
-    console.log('main', filename);
+    const baseURL = document.querySelector('.baseURL').innerHTML;
+    console.log('filename', filename);
+    console.log('baseURL', baseURL);
+    console.log('url', `${baseURL}/media/${filename}.wav`)
 
 
     var blob = null;
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", `http://127.0.0.1:8000/media/${filename}.wav`);
+    xhr.open("GET", `https://${baseURL}/media/${filename}.wav`);
     xhr.responseType = "blob";
     xhr.onload = function() {
         console.log('onload');
