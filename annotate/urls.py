@@ -15,12 +15,10 @@ Including another URLconf
 """
 from django.urls import path
 from . import views
-from django.conf import settings
-from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.homepage, name="home"),
     path('project/<int:project_id>/', views.project_homepage,
          name="project_homepage"),
     path('annotate/<int:audiotrack_id>/', views.annotate, name="annotate"),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
