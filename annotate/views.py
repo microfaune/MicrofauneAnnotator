@@ -1,3 +1,5 @@
+import json
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
@@ -43,3 +45,13 @@ def annotate(request, audiotrack_id):
     track = AudioTrack.objects.get(id=audiotrack_id)
     return render(request, "annotate/annotate.html",
                   {"track": track})
+
+
+@login_required()
+def save_annotation(request, audiotrack_id):
+    if request.is_ajax():
+        if request.method == 'POST':
+            data = request.POST.get('data', None)
+            print(f'\n\nRaw Data: {data}')
+
+    return HttpResponse({'test': 1}, content_type="application/json")
