@@ -1,3 +1,7 @@
+import json
+
+from django.http import JsonResponse
+from django.urls import reverse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
@@ -41,5 +45,20 @@ def project_homepage(request, project_id):
 @login_required()
 def annotate(request, audiotrack_id):
     track = AudioTrack.objects.get(id=audiotrack_id)
+
+    if request.is_ajax():
+        if request.method == 'POST':
+            annotation_data = json.loads(request.POST.get('annotation', None))
+
+            Annotation.objects.create(
+                track=track,
+                value=annotation_data,
+                user=track.project.user,
+            )
+            return JsonResponse({
+                'response': 'ok',
+                'url': reverse('project_homepage', args=(audiotrack_id,))
+                }, content_type="application/json")
+
     return render(request, "annotate/annotate.html",
                   {"track": track})
