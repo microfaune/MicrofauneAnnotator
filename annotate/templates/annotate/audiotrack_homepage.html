@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Annotations{% endblock %}
+
+{% block content %}
+
+<h1> Annotations </h1>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">User</th>
+      <th scope="col">Reviewed</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for annotation in annotations %}
+    <tr>
+      <td><a href="{% url 'annotate' audiotrack_id=annotation.track.id annotation_id=annotation.id %}"> {{ annotation.user }}</a></td>
+      <td>{{ annotation.reviewed }}</td>
+    </tr>
+
+    {% endfor %}
+
+
+  </tbody>
+
+</table>
+
+{% endblock %}

@@ -43,7 +43,16 @@ def project_homepage(request, project_id):
 
 
 @login_required()
-def annotate(request, audiotrack_id):
+def audiotrack_homepage(request, audiotrack_id):
+    annotations = Annotation.objects.filter(track_id=audiotrack_id)
+    print(annotations)
+
+    return render(request, "annotate/audiotrack_homepage.html",
+                  {"annotations": annotations})
+
+
+@login_required()
+def annotate(request, audiotrack_id, annotation_id):
     track = AudioTrack.objects.get(id=audiotrack_id)
 
     if request.is_ajax():
