@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+Annotation page for {{ track.file.name }}
+
+
+	<div class="filename" style="display: none;">{{ track.file.name }}</div>
+
+	<div class="container">
+	</div>
+	<div class="annotation">
+	    <h5>File <span class="index"></span> of <span class="total-files"></span>: <span class="filename"></span></h5>
+	    <div class="labels"></div>
+	    <div class="audio_visual"></div>
+	    <div class="play_bar"></div>
+	    <div class="hidden_img"></div>
+	    <div class="creation_stage_container"></div>
+	    <div class="submit_container"></div>
+	</div>
+
+
+
+{% endblock %}
