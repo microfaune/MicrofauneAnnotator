@@ -151,39 +151,6 @@ Annotator.prototype = {
                 alwaysShowTags
             );
 
-            // set video url
-            // $('#tutorial-video').attr('src', tutorialVideoURL);
-
-            // add instructions
-            // var instructionsContainer = $('#instructions-container');
-            // instructionsContainer.empty();
-            // if (typeof instructions !== "undefined"){
-            //     // $('.modal-trigger').leanModal();
-            //     instructions.forEach(function (instruction, index) {
-            //         if (index==0) {
-            //             // first instruction is the header
-            //             var instr = $('<h4>', {
-            //                 html: instruction
-            //             });
-            //         } else {
-            //             var instr = $('<h6>', {
-            //                 "class": "instruction",
-            //                 html: instruction
-            //             });
-            //         }
-            //         instructionsContainer.append(instr);
-            //     });
-            //     if (!my.instructionsViewed) {
-            //         $('#instructions-modal').openModal();
-            //         my.instructionsViewed = true;
-            //     }
-            // }
-            // else
-            // {
-            //     $('#instructions-container').hide();
-            //     $('#trigger').hide();
-            // }
-
             // Update the visualization type and the feedback type and load in the new audio clip
             my.wavesurfer.params.visualization = my.currentTask.visualization; // invisible, spectrogram, waveform
             my.wavesurfer.params.feedback = my.currentTask.feedback; // hiddenImage, silent, notify, none
@@ -227,10 +194,6 @@ Annotator.prototype = {
     submitAnnotations: function() {
         // Check if all the regions have been labeled before submitting
         if (this.noCheckLabels || this.stages.annotationDataValidationCheck()) {
-            // if (this.sendingResponse) {
-            //     // If it is already sending a post with the data, do nothing
-            //     return;
-            // }
             this.sendingResponse = true;
             // Get data about the annotations the user has created
             var content = {
@@ -247,17 +210,7 @@ Annotator.prototype = {
                 final_solution_shown: this.stages.aboveThreshold()
             };
 
-            // if (this.stages.aboveThreshold()) {
-            //     // If the user is suppose to recieve feedback and got enough of the annotations correct
-            //     // display the city the clip was recorded for 2 seconds and then submit their work
-            //     var my = this;
-            //     this.stages.displaySolution();
-            //     setTimeout(function() {
-            //         my.post(content);
-            //     }, 2000);
-            // } else {
-                this.post(content);
-            // }
+            this.post(content);
         }
     },
 
@@ -278,6 +231,30 @@ Annotator.prototype = {
     // Make POST request, passing back the content data. On success load in the next task
     post: function (content) {
         console.log('content', content);
+
+        create_post();
+
+        function create_post() {
+            $.ajax({
+                url : "save_annotation/",
+                headers: { "X-CSRFToken": $.cookie("csrftoken") },
+                type : "POST",
+                "dataType": "json",
+                data : {'a': 2},
+                // handle a successful response
+                success : function(json) {
+                    console.log(json.result); // log the returned json to the console
+                    console.log("success"); // another sanity check
+                },
+
+                // handle a non-successful response
+                error : function(xhr,errmsg,err) {
+                    $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                        " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                    console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                }
+            });
+        };
 
         var my = this;
         const filename = my.files[my.currentFilesIndex].name;
@@ -303,26 +280,6 @@ Annotator.prototype = {
           }
           my.loadNextTask();
         }
-        // $.ajax({
-        //     type: 'POST',
-        //     url: $.getJSON(postUrl),
-        //     contentType: 'application/json',
-        //     data: JSON.stringify(content.annotations)
-        // })
-        // .done(function(data) {
-        //     // If the last task had a hiddenImage component, remove it
-        //     if (my.currentTask.feedback === 'hiddenImage') {
-        //         my.hiddenImage.remove();
-        //     }
-        //     my.loadNextTask();
-        // })
-        // .fail(function() {
-        //     alert('Error: Unable to Submit Annotations');
-        // })
-        // .always(function() {
-        //     // No longer sending response
-        //     my.sendingResponse = false;
-        // });
     },
 
     updateFileNumberDisplay() {

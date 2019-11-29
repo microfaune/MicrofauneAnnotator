@@ -23,4 +23,5 @@ urlpatterns = [
     path('project/<int:project_id>/', views.project_homepage,
          name="project_homepage"),
     path('annotate/<int:audiotrack_id>/', views.annotate, name="annotate"),
+    path('annotate/<int:audiotrack_id>/save_annotation/', views.save_annotation, name="save_annotation"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
