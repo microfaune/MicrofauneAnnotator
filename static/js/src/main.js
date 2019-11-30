@@ -102,6 +102,9 @@ Annotator.prototype = {
         // annotation stages back to stage 1, update when the user started the task, update the workflow buttons.
         // Also if the user is suppose to get hidden image feedback, append that component to the page
         this.wavesurfer.on('ready', function () {
+            for (const annotation of my.annotations) {
+                my.wavesurfer.addRegion(annotation);
+            }
             const loader = document.querySelector('.loader');
             // loader.style.display = "none";
             my.playBar.update();
@@ -174,9 +177,10 @@ Annotator.prototype = {
     },
 
     // Update the interface with the next task's data
-    loadNextTask: function() {
+    loadNextTask: function(annotations) {
         // const audioDirectory = '/static/wav/';
         var my = this;
+        this.annotations = annotations;
         console.log('my.files', my.files)
         console.log('llll', my.currentFilesIndex);
         console.log('asdf', my.files.length);
@@ -276,8 +280,15 @@ function fileToJSON(file) {
 
 function main() {
     const filename = document.querySelector('.filename').innerHTML.split('/')[2].split('.')[0];
+    const annotations_html = document.querySelector('.annotations').innerHTML;
+    let annotations;
+    if (annotations_html === '') {
+        annotations = [];
+    } else {
+        annotations = JSON.parse(annotations_html);
+    }
     console.log('filename', filename);
-
+    console.log('annotations', annotations);
 
     var blob = null;
     var xhr = new XMLHttpRequest();
@@ -302,7 +313,7 @@ function main() {
       const files = [blob];
       console.log(files)
       annotator.files = files;
-      annotator.loadNextTask();
+      annotator.loadNextTask(annotations);
     }
 }
 
