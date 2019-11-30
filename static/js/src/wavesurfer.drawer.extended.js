@@ -5,11 +5,11 @@
 'use strict';
 
 /**
- * Purpose: 
- *   Add methods getFrequencyRGB, getFrequencies, resample, drawSpectrogram 
- *   to WaveSurfer.Drawer.Canvas. These methods are modified versions from the the 
+ * Purpose:
+ *   Add methods getFrequencyRGB, getFrequencies, resample, drawSpectrogram
+ *   to WaveSurfer.Drawer.Canvas. These methods are modified versions from the the
  *   spectrogram plugin (https://github.com/katspaugh/wavesurfer.js/blob/master/plugin/wavesurfer.spectrogram.js)
- *   to allow the wavesurfer drawer to draw a spectrogram representation when this.params.visualization is 
+ *   to allow the wavesurfer drawer to draw a spectrogram representation when this.params.visualization is
  *   set to "spectrogram"
  * Dependencies:
  *   WaveSurfer (lib/wavesurfer.min.js & lib/wavesurfer.spectrogram.min.js)
@@ -26,7 +26,7 @@ WaveSurfer.util.extend(WaveSurfer.Drawer.Canvas, {
             // If not just use gray scale
             return 'rgb(' + colorValue + ',' + colorValue + ',' + colorValue + ')';
         }
-        
+
     },
 
     getFrequencies: function(buffer) {
@@ -64,7 +64,7 @@ WaveSurfer.util.extend(WaveSurfer.Drawer.Canvas, {
             frequencies.push(array);
             currentOffset += (fftSamples - noverlap);
         }
-        
+
         return frequencies;
     },
 
@@ -130,12 +130,13 @@ WaveSurfer.util.extend(WaveSurfer.Drawer.Canvas, {
     }
 });
 
-/** 
+/**
  * Override the method WaveSurfer.drawBuffer to pass in the this.backend.buffer to
  * WaveSurfer.Drawer.drawPeaks since the buffer is needed to draw the spectrogram
  */
 WaveSurfer.util.extend(WaveSurfer, {
     drawBuffer: function () {
+        console.log('this.params.minPxPerSec', this.params.minPxPerSec)
         var nominalWidth = Math.round(
             this.getDuration() * this.params.minPxPerSec * this.params.pixelRatio
         );
@@ -153,8 +154,8 @@ WaveSurfer.util.extend(WaveSurfer, {
     },
 });
 
-/** 
- * Override the methods WaveSurfer.Drawer.drawPeaks to support invisible and 
+/**
+ * Override the methods WaveSurfer.Drawer.drawPeaks to support invisible and
  * spectrogram representations
  */
 WaveSurfer.util.extend(WaveSurfer.Drawer, {

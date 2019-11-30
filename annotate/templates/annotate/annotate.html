@@ -8,14 +8,13 @@
 <h3><a href="{% url 'audiotrack_homepage' audiotrack_id=track.id %}">{{ track.name }}</a></h3>
 
 
-<div id="plot-container"></div>
 
 <div class="filename" style="display: none;">{{ track.file.name }}</div>
 <div class="annotations" style="display: none;">{{ annotation.value }}</div>
 
-<div class="container">
-</div>
+<div class="container"></div>
 <div class="annotation">
+	<div id="plot-container" style="overflow:scroll"></div>
     <h5>File <span class="index"></span> of <span class="total-files"></span>: <span class="filename"></span></h5>
     <div class="labels"></div>
     <div class="audio_visual"></div>
