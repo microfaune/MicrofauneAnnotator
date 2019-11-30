@@ -5,6 +5,9 @@
 {% block content %}
 
 <h1> Annotations </h1>
+<a href="{% url 'annotate' audiotrack_id=track.id annotation_id=0 %}">
+  Load an empty annotation file
+</a>
 <table class="table">
   <thead>
     <tr>

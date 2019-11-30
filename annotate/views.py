@@ -44,11 +44,13 @@ def project_homepage(request, project_id):
 
 @login_required()
 def audiotrack_homepage(request, audiotrack_id):
+    track = AudioTrack.objects.get(id=audiotrack_id)
     annotations = Annotation.objects.filter(track_id=audiotrack_id)
     print(annotations)
 
     return render(request, "annotate/audiotrack_homepage.html",
-                  {"annotations": annotations})
+                  {"track": track,
+                   "annotations": annotations})
 
 
 @login_required()
@@ -57,7 +59,7 @@ def annotate(request, audiotrack_id, annotation_id):
 
     if request.is_ajax():
         if request.method == 'POST':
-            annotation_data = json.loads(request.POST.get('annotation', None))
+            annotation_data = request.POST.get('annotation', None)
 
             Annotation.objects.create(
                 track=track,
@@ -69,5 +71,11 @@ def annotate(request, audiotrack_id, annotation_id):
                 'url': reverse('project_homepage', args=(audiotrack_id,))
                 }, content_type="application/json")
 
+    if annotation_id == 0:
+        return render(request, "annotate/annotate.html",
+                      {"track": track,})
+
+    annotation = Annotation.objects.get(id=annotation_id)
     return render(request, "annotate/annotate.html",
-                  {"track": track})
+                  {"track": track,
+                   "annotation": annotation,})
