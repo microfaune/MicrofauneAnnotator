@@ -3,8 +3,10 @@
 {% block title %}Annotations{% endblock %}
 
 {% block content %}
+<a href="{% url 'project_homepage' project_id=track.project.id %}"> {{ track.project.name }}</a>
 
-<h1> Annotations </h1>
+<h3>Annotations for {{ track.name }}</h3>
+
 <a href="{% url 'annotate' audiotrack_id=track.id annotation_id=0 %}">
   Load an empty annotation file
 </a>
@@ -12,14 +14,14 @@
   <thead>
     <tr>
       <th scope="col">User</th>
-      <th scope="col">Reviewed</th>
+      <th scope="col">Date</th>
     </tr>
   </thead>
   <tbody>
-    {% for annotation in annotations %}
+    {% for annotation in annotations reversed %}
     <tr>
       <td><a href="{% url 'annotate' audiotrack_id=annotation.track.id annotation_id=annotation.id %}"> {{ annotation.user }}</a></td>
-      <td>{{ annotation.reviewed }}</td>
+      <td>{{ annotation.date_time }}</td>
     </tr>
 
     {% endfor %}

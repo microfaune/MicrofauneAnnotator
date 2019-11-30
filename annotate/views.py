@@ -61,11 +61,19 @@ def annotate(request, audiotrack_id, annotation_id):
         if request.method == 'POST':
             annotation_data = request.POST.get('annotation', None)
 
-            Annotation.objects.create(
-                track=track,
-                value=annotation_data,
-                user=track.project.user,
-            )
+            if annotation_id == 0:
+                Annotation.objects.create(
+                    track=track,
+                    value=annotation_data,
+                    user=track.project.user,
+                )
+            else:
+                Annotation.objects.create(
+                    track=track,
+                    value=annotation_data,
+                    user=track.project.user,
+                    reviewed=True,
+                )
             return JsonResponse({
                 'response': 'ok',
                 'url': reverse('project_homepage', args=(audiotrack_id,))
