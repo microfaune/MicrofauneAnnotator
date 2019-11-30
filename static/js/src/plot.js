@@ -21,37 +21,21 @@ xhr.send();
 
 
 
-const sendDataToModel = (file) => {
-
+const sendDataToModel = (blob) => {
     const formData = new FormData();
-    formData.append("file", file);
-    formData.name = file.filename;
-    console.log(formData);
+    formData.append("file", blob, blob.name);
 
     const url = "http://127.0.0.1:5000";
 
-    // const xhr = new XMLHttpRequest();
-    // xhr.open("POST", url);
-    // xhr.send(formData);
-
-    // xhr.onreadystatechange = function() {
-    //     console.log('===jjjkj')
-    //     if (xhr.readyState == XMLHttpRequest.DONE) {
-    //         plotData(xhr.responseText);
-    //     }
-    // }
-
-
     $.ajax({
         url : url,
-        headers: {
-            "content-type": "audio/wav"
-        },
+        contentType: false,
         type : "POST",
-        data : file,
-        success : function(json) {
+        data : formData,
+        processData: false,
+        success : function(response) {
             console.log("success");
-            plotData(response);
+            plotData(JSON.parse(response));
         },
         error : function(xhr, errmsg, err) {
             console.log("Something went wrong: ", errmsg);
@@ -62,6 +46,10 @@ const sendDataToModel = (file) => {
 
 
 const plotData = (predictions) => {
+    const width = document.querySelector(".audio_visual > wave > canvas").offsetWidth;
+    console.log(width);
+    document.querySelector(".audio_visual").style.width = `${width}px`;
+    document.querySelector("#plot-container").style.width = `${width}px`;
     const data = [
         {
             y: predictions,
@@ -80,7 +68,7 @@ const plotData = (predictions) => {
             range: [0, 1],
             showgrid: false
         },
-        width: window.innerWidth,
+        width: width,
         dragmode: "pan",
         height: 200,
         autosize: false,
@@ -96,4 +84,4 @@ const plotData = (predictions) => {
     Plotly.newPlot("plot-container", data, layout);
 }
 
-}, 2000);
+}, 50);

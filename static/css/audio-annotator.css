@@ -5,8 +5,15 @@
 .annotation,
 .creation_stage_container,
 .hidden_img {
-  width: 97%;
+  width: 100%;
   margin: auto;
+}
+
+.labels {
+  height: 30px;
+}
+.labels > label_container {
+  height: 30px !important;
 }
 
 .btn {
