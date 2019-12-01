@@ -5,22 +5,31 @@
 {% block content %}
 <a href="{% url 'project_homepage' project_id=track.project.id %}"> {{ track.project.name }}</a>
 
-<h3>Annotations for {{ track.name }}</h3>
+<h3>{{ track.name }}</h3>
 
-<a href="{% url 'annotate' audiotrack_id=track.id annotation_id=0 %}">
-  Load an empty annotation file
+<a class="btn btn-dark" href="{% url 'annotate' audiotrack_id=track.id annotation_id=0 %}">
+  New annotation
 </a>
+
+<p>Review existing annotation:</p>
+
 <table class="table">
   <thead>
     <tr>
-      <th scope="col">User</th>
-      <th scope="col">Date</th>
+      <th scope="col">Annotation Id</th>
+      <th scope="col">Created By</th>
+      <th scope="col">Reviewed</th>
+      <th scope="col">Reviewed By</th>
+      <th scope="col">Last Modified</th>
     </tr>
   </thead>
   <tbody>
     {% for annotation in annotations reversed %}
     <tr>
-      <td><a href="{% url 'annotate' audiotrack_id=annotation.track.id annotation_id=annotation.id %}"> {{ annotation.user }}</a></td>
+      <td><a href="{% url 'annotate' audiotrack_id=annotation.track.id annotation_id=annotation.id %}"> {{ annotation.id }}</a></td>
+      <td>annotation.user</td>
+      <td>{{ annotation.reviewed }}</td>
+      <td>{{ annotation.reviewed_by }}</td>
       <td>{{ annotation.date_time }}</td>
     </tr>
 

@@ -50,6 +50,7 @@ const plotData = (predictions) => {
     console.log(width);
     document.querySelector(".audio_visual").style.width = `${width}px`;
     document.querySelector("#plot-container").style.width = `${width}px`;
+    document.querySelector(".labels").style.width = `${width}px`;
     const data = [
         {
             y: predictions,
