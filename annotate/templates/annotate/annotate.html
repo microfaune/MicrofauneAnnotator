@@ -7,7 +7,11 @@
 
 <h3><a href="{% url 'audiotrack_homepage' audiotrack_id=track.id %}">{{ track.name }}</a></h3>
 
-
+{% if annotation %}
+<h3>Review this Annotation:</h3>
+{% else %}
+<h3>New Annotation:</h3>
+{% endif %}
 
 <div class="filename" style="display: none;">{{ track.file.name }}</div>
 <div class="annotations" style="display: none;">{{ annotation.value }}</div>
