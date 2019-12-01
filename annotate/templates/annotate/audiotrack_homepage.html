@@ -27,7 +27,7 @@
     {% for annotation in annotations reversed %}
     <tr>
       <td><a href="{% url 'annotate' audiotrack_id=annotation.track.id annotation_id=annotation.id %}"> {{ annotation.id }}</a></td>
-      <td>annotation.user</td>
+      <td>{{ annotation.user }}</td>
       <td>{{ annotation.reviewed }}</td>
       <td>{{ annotation.reviewed_by }}</td>
       <td>{{ annotation.date_time }}</td>
