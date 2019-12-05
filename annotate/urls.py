@@ -24,5 +24,5 @@ urlpatterns = [
          name="project_homepage"),
     path('audiotrack/<int:audiotrack_id>/', views.audiotrack_homepage,
          name="audiotrack_homepage"),
-    path('annotate/<int:audiotrack_id>/<int:annotation_id>', views.annotate, name="annotate"),
+    path('annotate/<int:audiotrack_id>/<int:annotation_id>/', views.annotate, name="annotate"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

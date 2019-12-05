@@ -1,5 +1,3 @@
-import json
-
 from django.http import JsonResponse
 from django.urls import reverse
 from django.shortcuts import render
@@ -68,15 +66,14 @@ def annotate(request, audiotrack_id, annotation_id):
                     user=track.project.user,
                 )
             else:
-                Annotation.objects.create(
-                    track=track,
-                    value=annotation_data,
-                    user=track.project.user,
-                    reviewed=True,
-                )
+                annotation = Annotation.objects.get(id=annotation_id)
+                annotation.value = annotation_data
+                annotation.reviewed = True
+                annotation.reviewed_by = track.project.user
+                annotation.save()
             return JsonResponse({
                 'response': 'ok',
-                'url': reverse('project_homepage', args=(audiotrack_id,))
+                'url': reverse('audiotrack_homepage', args=(audiotrack_id,))
                 }, content_type="application/json")
 
     if annotation_id == 0:
