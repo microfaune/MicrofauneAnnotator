@@ -290,7 +290,6 @@ function main() {
         annotations = JSON.parse(annotations_html);
     }
     console.log('filename', filename);
-    console.log('annotations', annotations);
 
     var blob = null;
     var xhr = new XMLHttpRequest();

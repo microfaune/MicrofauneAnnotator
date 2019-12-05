@@ -84,3 +84,13 @@ def annotate(request, audiotrack_id, annotation_id):
     return render(request, "annotate/annotate.html",
                   {"track": track,
                    "annotation": annotation,})
+
+
+@login_required()
+def save_annotation(request, audiotrack_id):
+    if request.is_ajax():
+        if request.method == 'POST':
+            data = request.POST.get('data', None)
+            print(f'\n\nRaw Data: {data}')
+
+    return HttpResponse({'test': 1}, content_type="application/json")
