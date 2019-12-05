@@ -185,17 +185,9 @@ WorkflowBtns.prototype = {
     create: function() {
         var my = this;
 
-        const annotations_html = document.querySelector('.annotations').innerHTML;
-        let submitText;
-        if (annotations_html === '') {
-            submitText = "SUBMIT ANNOTATIONS";
-        } else {
-            submitText = "REVIEW ANNOTATIONS";
-        }
-
         this.nextBtn = $('<button>', {
             class: 'btn submit',
-            text: submitText
+            text: "SUBMIT ANNOTATIONS"
         });
         this.nextBtn.click(function () {
             $(my).trigger('submit-annotations');

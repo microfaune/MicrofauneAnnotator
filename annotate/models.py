@@ -72,9 +72,12 @@ class AudioTrack(models.Model):
 class Annotation(models.Model):
     track = models.ForeignKey(AudioTrack, on_delete=models.CASCADE)
     value = models.TextField(validators=[validate_json], default="")
-    user = models.ForeignKey(User, null=True, related_name='user', on_delete=models.SET_NULL)
+    user = models.ForeignKey(User, null=True, related_name='user',
+                             on_delete=models.SET_NULL)
     reviewed = models.BooleanField(default=False)
-    reviewed_by = models.ForeignKey(User, null=True, related_name='reviewed_by', on_delete=models.SET_NULL)
+    reviewed_by = models.ForeignKey(User, null=True,
+                                    related_name='reviewed_by',
+                                    on_delete=models.SET_NULL)
     date_time = models.DateTimeField(auto_now=True, blank=True)
 
     def __str__(self):

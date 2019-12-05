@@ -16,7 +16,7 @@
 
  // import streamSaver from 'streamsaver';
  // const streamSaver = require('streamsaver');
- const streamSaver = window.streamSaver;
+const streamSaver = window.streamSaver;
 
 function Annotator() {
     this.wavesurfer;
@@ -144,9 +144,8 @@ Annotator.prototype = {
             // annotation task if the user is suppose to recieve feedback
             var proximityTags = my.currentTask.proximityTag;
             var annotationTags = my.currentTask.annotationTag;
-            // var tutorialVideoURL = my.currentTask.tutorialVideoURL;
             var alwaysShowTags = my.currentTask.alwaysShowTags;
-            // var instructions = my.currentTask.instructions;
+
             my.stages.reset(
                 proximityTags,
                 annotationTags,
@@ -178,22 +177,13 @@ Annotator.prototype = {
         }
     },
 
-    // Update the interface with the next task's data
-    loadNextTask: function(annotations) {
-        // const audioDirectory = '/static/wav/';
+    // Update the interface with the task's data
+    loadTask: function(annotations) {
         var my = this;
-        this.annotations = annotations;
-        console.log('my.files', my.files)
-        console.log('llll', my.currentFilesIndex);
-        console.log('asdf', my.files.length);
-        if (my.currentFilesIndex === my.files.length) {
-          console.log("This is done!")
-        } else {
-          // my.updateFileNumberDisplay();
-          const JSONFeed = fileToJSON(my.files[my.currentFilesIndex]);
-          my.currentTask = JSONFeed.task;
-          my.update();
-        }
+        my.annotations = annotations;
+        const JSONFeed = fileToJSON(my.files[my.currentFilesIndex]);
+        my.currentTask = JSONFeed.task;
+        my.update();
     },
 
     // Collect data about users annotations and submit it to the backend
@@ -280,46 +270,30 @@ function fileToJSON(file) {
   }
 }
 
-function main() {
-    const filename = document.querySelector('.filename').innerHTML.split('/')[2].split('.')[0];
-    const annotations_html = document.querySelector('.annotations').innerHTML;
-    let annotations;
-    if (annotations_html === '') {
-        annotations = [];
-    } else {
-        annotations = JSON.parse(annotations_html);
-    }
-    console.log('filename', filename);
-
+function main(track_name, track_file, annotations, predictions) {
     var blob = null;
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", `/media/${filename}.wav`);
+    xhr.open("GET", track_file);
     xhr.responseType = "blob";
     xhr.onload = function() {
-        console.log('onload');
         blob = xhr.response;
-        blob.name = `${filename}.wav`;
-        blob.webkitRelativePath = `${filename}.wav`;
+        blob.name = track_name;
+        blob.webkitRelativePath = track_name;
         LoadAndDisplayFile(blob);
+        if (predictions) {plotData(predictions)};
     }
     xhr.send()
-
 
     // Create all the components
     var annotator = new Annotator();
 
     const LoadAndDisplayFile = (blob) => {
-      const loaderBis = document.querySelector('.loader');
-      // loaderBis.style.display = "none";
       const files = [blob];
-      console.log(files)
       annotator.files = files;
-      annotator.loadNextTask(annotations);
+      annotator.loadTask(annotations);
+      
     }
 }
-
-main();
-
 
 
 // lastModified: 1571509531661
