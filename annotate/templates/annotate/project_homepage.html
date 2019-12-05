@@ -17,7 +17,7 @@
   <tbody>
     {% for track in tracks %}
     <tr>
-      <td><a href="{% url 'annotate' audiotrack_id=track.id %}"> {{ track.name }}</a></td>
+      <td><a href="{% url 'audiotrack_homepage' audiotrack_id=track.id %}"> {{ track.name }}</a></td>
       <td>{{ track.annotation_count }}</td>
       <td>TODO</td>
     </tr>

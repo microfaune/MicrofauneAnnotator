@@ -74,6 +74,7 @@ class Annotation(models.Model):
     value = models.TextField(validators=[validate_json], default="")
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     reviewed = models.BooleanField(default=False)
+    date_time = models.DateTimeField(auto_now_add=True, blank=True)
 
     def __str__(self):
         return f"{self.track} by {self.user.username}"
