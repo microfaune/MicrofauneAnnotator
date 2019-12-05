@@ -158,6 +158,8 @@ Annotator.prototype = {
             my.wavesurfer.params.visualization = my.currentTask.visualization; // invisible, spectrogram, waveform
             my.wavesurfer.params.feedback = my.currentTask.feedback; // hiddenImage, silent, notify, none
             my.wavesurfer.load(my.currentTask.url);
+
+            my.wavesurfer.params.minPxPerSec = 40;
         };
 
         if (this.currentTask.feedback !== 'none') {
