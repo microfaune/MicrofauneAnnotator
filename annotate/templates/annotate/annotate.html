@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Annotation{% endblock %}
 
 {% block content %}
 <a href="{% url 'project_homepage' project_id=track.project.id %}"> {{ track.project.name }}</a>
@@ -13,8 +14,7 @@
 <h3>New Annotation:</h3>
 {% endif %}
 
-<div class="filename" style="display: none;">{{ track.file.name }}</div>
-<div class="annotations" style="display: none;">{{ annotation.value }}</div>
+
 
 <div class="container"></div>
 <div class="annotation">
@@ -27,6 +27,44 @@
 <div class="play_bar"></div>
 <div class="hidden_img"></div>
 <div class="submit_container"></div>
+{% endblock %}
 
+{% block scripts %}
+<script type="text/javascript" src="{% static 'js/wavesurfer.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/wavesurfer.spectrogram.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/colormap/colormap.min.js' %}"></script>
 
+<script type="text/javascript" src="{% static 'js/src/message.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/src/wavesurfer.regions.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/src/wavesurfer.drawer.extended.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/src/wavesurfer.labels.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/src/hidden_image.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/src/components.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/src/annotation_stages.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/src/main.js' %}" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/web-streams-polyfill@2.0.2/dist/ponyfill.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/streamsaver@2.0.3/StreamSaver.min.js"></script>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script type="text/javascript" src="{% static 'js/src/plot.js' %}"></script>
+
+<script type="text/javascript">
+	$('document').ready(function() {
+			var track_name = "{{ track.name }}";
+			var track_file = "{{ track.file.name}}";
+			var annotations = JSON.parse('{{ annotation.value | safe }}');
+			var predictions = '{{ track.predictions | safe }}';
+			if (predictions) {
+					predictions =  JSON.parse(predictions)
+			} else {
+				  predictions = ''
+			}
+			predictions = Array(100).fill(0.5);
+  		main(track_name, track_file, annotations, predictions);
+			setTimeout(function() {
+			}, 1000);
+
+	});
+
+</script>
 {% endblock %}

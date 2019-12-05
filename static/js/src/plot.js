@@ -1,25 +1,21 @@
-setTimeout(() => {
 
-const filename = document
-    .querySelector(".filename")
-    .innerHTML.split("/")[2]
-    .split(".")[0];
-console.log('============', filename)
-var blob = null;
-var xhr = new XMLHttpRequest();
-xhr.open("GET", `/media/${filename}.wav`);
-xhr.responseType = "blob";
-xhr.onload = function() {
-    console.log("onload");
-    blob = xhr.response;
-    blob.name = `${filename}.wav`;
-    blob.webkitRelativePath = `${filename}.wav`;
-    sendDataToModel(blob);
-};
-xhr.send();
-
-
-
+// const filename = document
+//     .querySelector(".filename")
+//     .innerHTML.split("/")[2]
+//     .split(".")[0];
+// console.log('============', filename)
+// var blob = null;
+// var xhr = new XMLHttpRequest();
+// xhr.open("GET", `/media/${filename}.wav`);
+// xhr.responseType = "blob";
+// xhr.onload = function() {
+//     console.log("onload");
+//     blob = xhr.response;
+//     blob.name = `${filename}.wav`;
+//     blob.webkitRelativePath = `${filename}.wav`;
+//     sendDataToModel(blob);
+// };
+// xhr.send();
 
 const sendDataToModel = (blob) => {
     const formData = new FormData();
@@ -43,11 +39,8 @@ const sendDataToModel = (blob) => {
     });
 }
 
-
-
 const plotData = (predictions) => {
     const width = document.querySelector(".audio_visual > wave > canvas").offsetWidth;
-    console.log(width);
     document.querySelector(".audio_visual").style.width = `${width}px`;
     document.querySelector("#plot-container").style.width = `${width}px`;
     document.querySelector(".labels").style.width = `${width}px`;
@@ -84,5 +77,3 @@ const plotData = (predictions) => {
 
     Plotly.newPlot("plot-container", data, layout);
 }
-
-}, 50);

@@ -63,7 +63,7 @@ def annotate(request, audiotrack_id, annotation_id):
                 Annotation.objects.create(
                     track=track,
                     value=annotation_data,
-                    user=track.project.user,
+                    user=request.user,
                 )
             else:
                 annotation = Annotation.objects.get(id=annotation_id)
@@ -78,12 +78,15 @@ def annotate(request, audiotrack_id, annotation_id):
 
     if annotation_id == 0:
         return render(request, "annotate/annotate.html",
-                      {"track": track,})
+                      {"track": track, })
+    if annotation_id == 0:
+        annotation = {"id": None, "value": ""}
+    else:
+        annotation = Annotation.objects.get(id=annotation_id)
 
-    annotation = Annotation.objects.get(id=annotation_id)
     return render(request, "annotate/annotate.html",
                   {"track": track,
-                   "annotation": annotation,})
+                   "annotation": annotation})
 
 
 @login_required()

@@ -4,68 +4,36 @@
 <head>
   <meta charset="utf-8">
   <title>{% block title %}{% endblock %}</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css" integrity="sha384-SI27wrMjH3ZZ89r4o+fGIJtnzkAnFs3E4qz9DIYioCQ5l9Rd/7UAa8DHcaL8jkWt" crossorigin="anonymous">
-
-
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
   <link rel="stylesheet" href="{% static '/css/materialize.min.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/audio-annotator.css' %}">
-
-  <script type="text/javascript" src="{% static 'js/jquery-2.2.3.min.js' %}"></script>
-  <script type="text/javascript" src="{% static 'js/materialize.min.js' %}"></script>
-  <script type="text/javascript" src="{% static 'js/wavesurfer.min.js' %}"></script>
-  <script type="text/javascript" src="{% static 'js/wavesurfer.spectrogram.min.js' %}"></script>
-  <script type="text/javascript" src="{% static 'js/colormap/colormap.min.js' %}"></script>
-
-  <script type="text/javascript" src="{% static 'js/src/message.js' %}"></script>
-  <script type="text/javascript" src="{% static 'js/src/wavesurfer.regions.js' %}"></script>
-  <script type="text/javascript" src="{% static 'js/src/wavesurfer.drawer.extended.js' %}"></script>
-  <script type="text/javascript" src="{% static 'js/src/wavesurfer.labels.js' %}"></script>
-  <script type="text/javascript" src="{% static 'js/src/hidden_image.js' %}"></script>
-  <script type="text/javascript" src="{% static 'js/src/components.js' %}"></script>
-  <script type="text/javascript" src="{% static 'js/src/annotation_stages.js' %}"></script>
-  <script type="text/javascript" src="{% static 'js/src/main.js' %}" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/web-streams-polyfill@2.0.2/dist/ponyfill.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/streamsaver@2.0.3/StreamSaver.min.js"></script>
-
-  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-  <script type="text/javascript" src="{% static 'js/src/plot.js' %}"></script>
-
-
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
 </head>
+
 <body>
    <!-- Navigation -->
-  <nav class="navbar navbar-expand-md navbar-dark bg-dark static-top">
-    <div class="container">
-	    <a class="navbar-brand" href="{% url 'home' %}">MicrofauneAnnotator</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarResponsive">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-          </li>
-          {% if request.user.is_staff %}
-	        <li class="nav-item  active">
-            <a class="nav-link" href="/admin/">Admin</a>
-          </li>
-          {% endif %}
-        </ul>
-      </div>
+  <nav>
+    <div class="nav-wrapper">
+	    <a class="brand-logo" href="{% url 'home' %}">MicrofauneAnnotator</a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href="{% url 'logout' %}">Logout</a></li>
+        {% if request.user.is_staff %}
+	      <li><a href="/admin/">Admin</a></li>
+        {% endif %}
+      </ul>
     </div>
   </nav>
-  <main role="main" class="container" style="padding-top: 25px">
+  <main role="main" style="padding-top: 25px">
     {% block content %}
     {% endblock %}
   </main>
 
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="{% static 'js/jquery-2.2.3.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/materialize.min.js' %}"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/js/bootstrap.min.js" integrity="sha384-3qaqj0lc6sV/qpzrc1N5DC6i1VRn/HyX4qdPaiEFbn54VjQBEU341pvjz7Dv3n6P" crossorigin="anonymous"></script>
+  {% block scripts %}
+  {% endblock %}
 </body>
 
 
