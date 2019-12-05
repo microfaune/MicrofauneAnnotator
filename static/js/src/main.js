@@ -102,6 +102,9 @@ Annotator.prototype = {
         // annotation stages back to stage 1, update when the user started the task, update the workflow buttons.
         // Also if the user is suppose to get hidden image feedback, append that component to the page
         this.wavesurfer.on('ready', function () {
+            for (const annotation of my.annotations) {
+                my.wavesurfer.addRegion(annotation);
+            }
             const loader = document.querySelector('.loader');
             // loader.style.display = "none";
             my.playBar.update();
@@ -174,9 +177,10 @@ Annotator.prototype = {
     },
 
     // Update the interface with the next task's data
-    loadNextTask: function() {
+    loadNextTask: function(annotations) {
         // const audioDirectory = '/static/wav/';
         var my = this;
+        this.annotations = annotations;
         console.log('my.files', my.files)
         console.log('llll', my.currentFilesIndex);
         console.log('asdf', my.files.length);
@@ -220,7 +224,7 @@ Annotator.prototype = {
               "feedback": "none",
               "visualization": "spectrogram",
               "proximityTag": [],
-              "annotationTag": ["bird"],
+              "annotationTag": [],
               "url": `/media/${file.webkitRelativePath}`,
               "tutorialVideoURL":"",
               "alwaysShowTags": true
@@ -231,55 +235,21 @@ Annotator.prototype = {
     // Make POST request, passing back the content data. On success load in the next task
     post: function (content) {
         console.log('content', content);
-
-        create_post();
-
-        function create_post() {
-            $.ajax({
-                url : "save_annotation/",
-                headers: { "X-CSRFToken": $.cookie("csrftoken") },
-                type : "POST",
-                "dataType": "json",
-                data : {'a': 2},
-                // handle a successful response
-                success : function(json) {
-                    console.log(json.result); // log the returned json to the console
-                    console.log("success"); // another sanity check
-                },
-
-                // handle a non-successful response
-                error : function(xhr,errmsg,err) {
-                    $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
-                        " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
-                    console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
-                }
-            });
-        };
-
-        var my = this;
-        const filename = my.files[my.currentFilesIndex].name;
-        const fileStream = streamSaver.createWriteStream(`${filename}_labeled.json`)
-        // const fileStream = streamSaver.createWriteStream('annotation.json')
-
-        my.currentFilesIndex++
-        if (content.annotations.length > 0) {
-          new Response(JSON.stringify(content.annotations)).body
-            .pipeTo(fileStream)
-            .then(() => {
-              // If the last task had a hiddenImage component, remove it
-              if (my.currentTask.feedback === 'hiddenImage') {
-                  my.hiddenImage.remove();
-              }
-              my.loadNextTask();
-            }, () => {
-              alert('Error: Unable to Submit Annotations');
-            });
-        } else {
-          if (my.currentTask.feedback === 'hiddenImage') {
-              my.hiddenImage.remove();
-          }
-          my.loadNextTask();
-        }
+        $.ajax({
+            url : "",
+            headers: { "X-CSRFToken": $.cookie("csrftoken") },
+            type : "POST",
+            data : {
+                'annotation': JSON.stringify(content.annotations)
+            },
+            success : function(json) {
+                console.log("success");
+                document.location.href = json.url;
+            },
+            error : function(xhr, errmsg, err) {
+                console.log("Something went wrong: ", errmsg);
+            }
+        });
     },
 
     updateFileNumberDisplay() {
@@ -310,8 +280,14 @@ function fileToJSON(file) {
 
 function main() {
     const filename = document.querySelector('.filename').innerHTML.split('/')[2].split('.')[0];
+    const annotations_html = document.querySelector('.annotations').innerHTML;
+    let annotations;
+    if (annotations_html === '') {
+        annotations = [];
+    } else {
+        annotations = JSON.parse(annotations_html);
+    }
     console.log('filename', filename);
-
 
     var blob = null;
     var xhr = new XMLHttpRequest();
@@ -336,7 +312,7 @@ function main() {
       const files = [blob];
       console.log(files)
       annotator.files = files;
-      annotator.loadNextTask();
+      annotator.loadNextTask(annotations);
     }
 }
 

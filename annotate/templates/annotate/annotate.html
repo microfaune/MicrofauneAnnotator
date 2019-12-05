@@ -3,11 +3,13 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-Annotation page for {{ track.file.name }}
+<a href="{% url 'project_homepage' project_id=track.project.id %}"> {{ track.project.name }}</a>
 
+<h3><a href="{% url 'audiotrack_homepage' audiotrack_id=track.id %}">{{ track.name }}</a></h3>
 
 
 	<div class="filename" style="display: none;">{{ track.file.name }}</div>
+	<div class="annotations" style="display: none;">{{ annotation.value }}</div>
 
 	<div class="container">
 	</div>
@@ -17,7 +19,6 @@ Annotation page for {{ track.file.name }}
 	    <div class="audio_visual"></div>
 	    <div class="play_bar"></div>
 	    <div class="hidden_img"></div>
-	    <div class="creation_stage_container"></div>
 	    <div class="submit_container"></div>
 	</div>
 
