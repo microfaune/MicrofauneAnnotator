@@ -4,6 +4,14 @@ main {
   padding-top: 25px;
 }
 
+.account_form {
+  text-align: center;
+}
+
+.margin25 {
+  margin-bottom: 25px; !important
+}
+
 .loader {
   width: 128px !important;
   height: 128px !important;

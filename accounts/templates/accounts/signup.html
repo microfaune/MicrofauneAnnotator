@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col l4 offset-l4 m6 offset-m3 s12 account_form card-panel">
+    <div class="card-content">
+      <h4>Sign Up</h4>
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn green waves-effect waves-light margin25" type="submit">Sign up</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
