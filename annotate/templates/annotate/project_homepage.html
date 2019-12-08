@@ -3,23 +3,24 @@
 {% block title %}{{ project.name }}{% endblock %}
 
 {% block content %}
-<button type="button" class="btn btn-dark">Upload audio files (TODO)</button>
+<a class="btn green waves-effect waves-light" href="{% url 'upload_audio' project_id=project.id %}">Upload audio files</a>
 
-<h1> Project {{ project.name }} </h1>
+<h3> Project {{ project.name }} </h3>
 <table class="table">
   <thead>
     <tr>
       <th scope="col">Name</th>
+      <th scope="col">Duration</th>
       <th scope="col">Annotations</th>
-      <th scope="col">Reviewed</th>
+
     </tr>
   </thead>
   <tbody>
     {% for track in tracks %}
     <tr>
       <td><a href="{% url 'audiotrack_homepage' audiotrack_id=track.id %}"> {{ track.name }}</a></td>
+      <td>{{ track.duration }}</td>
       <td>{{ track.annotation_count }}</td>
-      <td>TODO</td>
     </tr>
 
     {% endfor %}
