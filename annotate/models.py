@@ -76,7 +76,7 @@ class Annotation(models.Model):
     user = models.ForeignKey(User, null=True, related_name='user',
                              on_delete=models.SET_NULL)
     reviewed = models.BooleanField(default=False)
-    reviewed_by = models.ForeignKey(User, null=True,
+    reviewed_by = models.ForeignKey(User, null=True, blank=True,
                                     related_name='reviewed_by',
                                     on_delete=models.SET_NULL)
     date_time = models.DateTimeField(auto_now=True, blank=True)

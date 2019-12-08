@@ -10,10 +10,12 @@
 
 <h3><a href="{% url 'audiotrack_homepage' audiotrack_id=track.id %}">{{ track.name }}</a></h3>
 
-{% if annotation %}
-<h3>Review this Annotation:</h3>
+{% if annotation.id is None %}
+<h3>Annotate track:</h3>
+{% elif request.user == annotation.user %}
+<h3>Modify your annotation:</h3>
 {% else %}
-<h3>New Annotation:</h3>
+<h3>Review this Annotation:</h3>
 {% endif %}
 
 <div class="container"></div>
@@ -62,10 +64,18 @@
 <script type="text/javascript" src="{% static 'js/src/plot.js' %}"></script>
 
 <script type="text/javascript">
+  var submit_message;
+  {% if annotation.id is None %}
+    submit_message = "SUBMIT ANNOTATION";
+  {% elif request.user == annotation.user %}
+    submit_message = "SUBMIT MODIFICATIONS";
+  {% else %}
+    submit_message = "SUBMIT REVIEW";
+  {% endif %}
+
 	$('document').ready(function() {
 		var track_name = "{{ track.name }}";
 		var track_file = "{{ track.file.name}}";
-
 		var annotations = '{{ annotation.value | safe }}';
 		if (annotations) {
 			annotations = JSON.parse(annotations);
@@ -75,13 +85,7 @@
 		if (predictions) {
 			predictions = JSON.parse(predictions)
 		}
-
-		// predictions = Array(400).fill(0);
-		// predictions.fill(1, 100, 200);
-		// predictions.fill(1, 300, 400);
 		main(track_name, track_file, annotations, predictions);
-		setTimeout(function() {}, 1000);
-
 	});
 </script>
 {% endblock %}

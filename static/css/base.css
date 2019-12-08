@@ -16,3 +16,7 @@ main {
   width: 128px !important;
   height: 128px !important;
 }
+
+td {
+  padding: 10px 5px
+}

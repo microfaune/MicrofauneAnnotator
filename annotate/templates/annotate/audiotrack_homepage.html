@@ -13,31 +13,34 @@
   New annotation
 </a>
 
-<p>Review existing annotation:</p>
+<p>Review existing annotations:</p>
 
-<table class="table">
+<table class="table highlight">
   <thead>
     <tr>
-      <th scope="col">Annotation Id</th>
       <th scope="col">Created By</th>
       <th scope="col">Reviewed</th>
       <th scope="col">Reviewed By</th>
-      <th scope="col">Last Modified</th>
+      <th scope="col">Action</th>
     </tr>
   </thead>
   <tbody>
     {% for annotation in annotations reversed %}
     <tr>
-      <td><a href="{% url 'annotate' audiotrack_id=annotation.track.id annotation_id=annotation.id %}"> {{ annotation.id }}</a></td>
       <td>{{ annotation.user }}</td>
       <td>{{ annotation.reviewed }}</td>
       <td>{{ annotation.reviewed_by }}</td>
-      <td>{{ annotation.date_time }}</td>
+      <td>
+        <a class="btn green waves-effect waves-light" href="{% url 'annotate' audiotrack_id=annotation.track.id annotation_id=annotation.id %}">
+          {% if request.user == annotation.user %}
+            Modify
+          {% else %}
+            Review
+          {% endif %}
+        </a>
+      </td>
     </tr>
-
     {% endfor %}
-
-
   </tbody>
 
 </table>

@@ -6,13 +6,13 @@
 <a class="btn green waves-effect waves-light" href="{% url 'upload_audio' project_id=project.id %}">Upload audio files</a>
 
 <h3> Project {{ project.name }} </h3>
-<table class="table">
+<table class="table highlight">
   <thead>
     <tr>
       <th scope="col">Name</th>
       <th scope="col">Duration</th>
-      <th scope="col">Annotations</th>
-
+      <th scope="col">Annotated by you</th>
+      <th scope="col">Total annotations</th>
     </tr>
   </thead>
   <tbody>
@@ -20,14 +20,10 @@
     <tr>
       <td><a href="{% url 'audiotrack_homepage' audiotrack_id=track.id %}"> {{ track.name }}</a></td>
       <td>{{ track.duration|floatformat }}</td>
+      <td>{{ track.user_annotation }}</td>
       <td>{{ track.annotation_count }}</td>
     </tr>
-
     {% endfor %}
-
-
   </tbody>
-
 </table>
-
 {% endblock %}

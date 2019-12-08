@@ -186,8 +186,9 @@ WorkflowBtns.prototype = {
         var my = this;
 
         this.nextBtn = $('<button>', {
-            class: 'btn submit',
-            text: "SUBMIT ANNOTATIONS"
+            id: "submit_annotation",
+            class: 'btn submit green waves-effect waves-light',
+            text: submit_message
         });
         this.nextBtn.click(function () {
             $(my).trigger('submit-annotations');
