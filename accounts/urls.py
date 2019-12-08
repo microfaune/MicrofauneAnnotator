@@ -1,4 +1,4 @@
-"""Annotate URL Configuration
+"""Accounts URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.1/topics/http/urls/
@@ -13,18 +13,11 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 
 urlpatterns = [
-    path('', views.homepage, name="home"),
-    path('project/<int:project_id>/', views.project_homepage,
-         name="project_homepage"),
-    path('audiotrack/<int:audiotrack_id>/', views.audiotrack_homepage,
-         name="audiotrack_homepage"),
-    path('annotate/<int:audiotrack_id>/<int:annotation_id>/', views.annotate,
-         name="annotate"),
-    path('project/<int:project_id>/upload', views.upload_files,
-         name='upload_audio')
+    path('', include('django.contrib.auth.urls')),
+    path('signup/', views.SignUp.as_view(), name='signup')
 ]

@@ -28,7 +28,6 @@ def homepage(request):
         if a[1]:
             review_counter[a[0]] += 1
     for p in projects:
-        print(p["id"])
         p["annotation_count"] = annotation_counter[p["id"]]
         p["review_count"] = review_counter[p["id"]]
 
