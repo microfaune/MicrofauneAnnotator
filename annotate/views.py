@@ -1,10 +1,17 @@
+import os
+
 from django.http import JsonResponse
 from django.urls import reverse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
 from django.db.models import Count
 
+from librosa.core import get_duration
+
 from .models import Project, AudioTrack, Annotation
+from .forms import MultipleFileFieldForm
+
 
 # Create your views here.
 @login_required()
@@ -97,3 +104,50 @@ def save_annotation(request, audiotrack_id):
             print(f'\n\nRaw Data: {data}')
 
     return HttpResponse({'test': 1}, content_type="application/json")
+
+
+@login_required()
+def upload_files(request, project_id):
+    message = ""
+    project = Project.objects.get(id=project_id)
+    if request.method == "POST":
+        form = MultipleFileFieldForm(request.POST, request.FILES)
+        current_files = project.audiotrack_set.values_list("name", flat=True)
+        if form.is_valid():
+            files = request.FILES.getlist("file_field")
+            non_audio = 0
+            duplicate = 0
+            success = 0
+            for f in files:
+                if not f.name.endswith((".mp3", ".ogg", ".wav", ".flac")):
+                    non_audio += 1
+                    continue
+                if f.name in current_files:
+                    duplicate += 1
+                    continue
+                local_file = os.path.join(settings.MEDIA_ROOT, f.name)
+                with open(local_file, 'wb+') as destination:
+                    for chunk in f.chunks():
+                        destination.write(chunk)
+                try:
+                    duration = get_duration(filename=local_file)
+                except Exception as e:
+                    duration = 0
+
+                AudioTrack.objects.create(
+                    name=f.name,
+                    file=os.path.join(settings.MEDIA_URL, f.name),
+                    format=os.path.splitext(f.name)[1][1:],
+                    project=project,
+                    duration=duration)
+                success += 1
+
+            message = f"{success} files successfully uploaded"
+            if non_audio:
+                message += f", {non_audio} non-audio files rejected"
+            if duplicate:
+                message += f", {duplicate} duplicate files rejected"
+
+    form = MultipleFileFieldForm()
+    return render(request, 'annotate/upload.html',
+                  {'form': form, 'project': project, 'message': message})

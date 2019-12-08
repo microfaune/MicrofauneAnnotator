@@ -3,11 +3,13 @@
 {% block title %}Annotations{% endblock %}
 
 {% block content %}
-<a href="{% url 'project_homepage' project_id=track.project.id %}"> {{ track.project.name }}</a>
+<a class="btn btn-small waves-effect waves-light green" href="{% url 'project_homepage' project_id=track.project.id %}">
+  <i class="material-icons left">arrow_back</i>{{ track.project.name }}
+</a>
 
 <h3>{{ track.name }}</h3>
 
-<a class="btn btn-dark" href="{% url 'annotate' audiotrack_id=track.id annotation_id=0 %}">
+<a class="btn waves-effect waves-light green" href="{% url 'annotate' audiotrack_id=track.id annotation_id=0 %}">
   New annotation
 </a>
 

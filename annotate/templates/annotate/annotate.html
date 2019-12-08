@@ -4,7 +4,9 @@
 {% block title %}Annotation{% endblock %}
 
 {% block content %}
-<a href="{% url 'project_homepage' project_id=track.project.id %}"> {{ track.project.name }}</a>
+<a class="btn btn-small waves-effect waves-light green" href="{% url 'project_homepage' project_id=track.project.id %}">
+  <i class="material-icons left">arrow_back</i>{{ track.project.name }}
+</a>
 
 <h3><a href="{% url 'audiotrack_homepage' audiotrack_id=track.id %}">{{ track.name }}</a></h3>
 
