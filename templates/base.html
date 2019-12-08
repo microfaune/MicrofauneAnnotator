@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <title>{% block title %}{% endblock %}</title>
 
+  <link rel="stylesheet" href="{% static '/css/base.css' %}">
   <link rel="stylesheet" href="{% static '/css/materialize.min.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/audio-annotator.css' %}">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
@@ -24,7 +25,8 @@
       </ul>
     </div>
   </nav>
-  <main role="main" style="padding-top: 25px">
+  <main role="main">
+
     {% block content %}
     {% endblock %}
   </main>

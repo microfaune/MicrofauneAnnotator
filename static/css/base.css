@@ -1,0 +1,10 @@
+main {
+  width: 80%;
+  margin: auto;
+  padding-top: 25px;
+}
+
+.loader {
+  width: 128px !important;
+  height: 128px !important;
+}

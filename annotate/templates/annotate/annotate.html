@@ -14,14 +14,25 @@
 <h3>New Annotation:</h3>
 {% endif %}
 
-
-
 <div class="container"></div>
 <div class="annotation">
 	<div id="plot-container"></div>
-    <h5>File <span class="index"></span> of <span class="total-files"></span>: <span class="filename"></span></h5>
-    <div class="labels"></div>
-    <div class="audio_visual"></div>
+	<h5>File</h5>
+	<div class="preloader-wrapper big active loader">
+		<div class="spinner-layer spinner-red-only">
+			<div class="circle-clipper left">
+				<div class="circle"></div>
+			</div>
+			<div class="gap-patch">
+				<div class="circle"></div>
+			</div>
+			<div class="circle-clipper right">
+				<div class="circle"></div>
+			</div>
+		</div>
+	</div>
+	<div class="labels"></div>
+	<div class="audio_visual"></div>
 </div>
 
 <div class="play_bar"></div>
@@ -50,21 +61,25 @@
 
 <script type="text/javascript">
 	$('document').ready(function() {
-			var track_name = "{{ track.name }}";
-			var track_file = "{{ track.file.name}}";
-			var annotations = JSON.parse('{{ annotation.value | safe }}');
-			var predictions = '{{ track.predictions | safe }}';
-			if (predictions) {
-					predictions =  JSON.parse(predictions)
-			} else {
-				  predictions = ''
-			}
-			predictions = Array(100).fill(0.5);
-  		main(track_name, track_file, annotations, predictions);
-			setTimeout(function() {
-			}, 1000);
+		var track_name = "{{ track.name }}";
+		var track_file = "{{ track.file.name}}";
+
+		var annotations = '{{ annotation.value | safe }}';
+		if (annotations) {
+			annotations = JSON.parse(annotations);
+		}
+
+		var predictions = '{{ track.predictions | safe }}';
+		if (predictions) {
+			predictions = JSON.parse(predictions)
+		}
+
+		// predictions = Array(400).fill(0);
+		// predictions.fill(1, 100, 200);
+		// predictions.fill(1, 300, 400);
+		main(track_name, track_file, annotations, predictions);
+		setTimeout(function() {}, 1000);
 
 	});
-
 </script>
 {% endblock %}
