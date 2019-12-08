@@ -39,8 +39,13 @@ def homepage(request):
 def project_homepage(request, project_id):
     project = Project.objects.get(id=project_id)
     tracks = AudioTrack.objects.filter(project_id=project_id).annotate(
-        annotation_count=Count("annotation"),
-    )
+        annotation_count=Count("annotation"))
+    user_annotations = Annotation.objects.filter(
+        track__project=project, user=request.user).values_list("track",
+                                                               flat=True)
+    for t in tracks:
+        t.user_annotation = "Yes" if t.id in user_annotations else "No"
+
     return render(request, "annotate/project_homepage.html",
                   {"project": project,
                    "tracks": tracks})
@@ -50,7 +55,6 @@ def project_homepage(request, project_id):
 def audiotrack_homepage(request, audiotrack_id):
     track = AudioTrack.objects.get(id=audiotrack_id)
     annotations = Annotation.objects.filter(track_id=audiotrack_id)
-    print(annotations)
 
     return render(request, "annotate/audiotrack_homepage.html",
                   {"track": track,
@@ -73,9 +77,10 @@ def annotate(request, audiotrack_id, annotation_id):
                 )
             else:
                 annotation = Annotation.objects.get(id=annotation_id)
+                if annotation.user != request.user:
+                    annotation.reviewed = True
+                    annotation.reviewed_by = request.user
                 annotation.value = annotation_data
-                annotation.reviewed = True
-                annotation.reviewed_by = track.project.user
                 annotation.save()
             return JsonResponse({
                 'response': 'ok',
