@@ -21,8 +21,8 @@ const streamSaver = window.streamSaver;
 function Annotator() {
     this.wavesurfer;
     this.playBar;
-    this.files;
-    this.currentFilesIndex = 0;
+    this.predictions;
+    this.file;
     this.stages;
     this.workflowBtns;
     this.currentTask;
@@ -106,7 +106,7 @@ Annotator.prototype = {
                 my.wavesurfer.addRegion(annotation);
             }
             const loader = document.querySelector('.loader');
-            // loader.style.display = "none";
+            loader.style.display = "none";
             my.playBar.update();
             my.stages.updateStage(1);
             my.updateTaskTime();
@@ -114,6 +114,7 @@ Annotator.prototype = {
             if (my.currentTask.feedback === 'hiddenImage') {
                 my.hiddenImage.append(my.currentTask.imgUrl);
             }
+            if (my.predictions) {plotData(my.predictions)};
         });
 
         this.wavesurfer.on('click', function (e) {
@@ -181,7 +182,7 @@ Annotator.prototype = {
     loadTask: function(annotations) {
         var my = this;
         my.annotations = annotations;
-        const JSONFeed = fileToJSON(my.files[my.currentFilesIndex]);
+        const JSONFeed = fileToJSON(my.file);
         my.currentTask = JSONFeed.task;
         my.update();
     },
@@ -245,12 +246,7 @@ Annotator.prototype = {
     },
 
     updateFileNumberDisplay() {
-        console.log(this.files)
-        const indexElement = document.querySelector('.index');
-        const totalFilesElement = document.querySelector('.total-files');
         const filename = document.querySelector('.filename');
-        indexElement.innerHTML = this.currentFilesIndex + 1;
-        totalFilesElement.innerHTML = this.files.length;
         filename.innerHTML = this.filename;
     }
 
@@ -280,7 +276,7 @@ function main(track_name, track_file, annotations, predictions) {
         blob.name = track_name;
         blob.webkitRelativePath = track_name;
         LoadAndDisplayFile(blob);
-        if (predictions) {plotData(predictions)};
+        // if (predictions) {plotData(predictions)};
     }
     xhr.send()
 
@@ -288,10 +284,10 @@ function main(track_name, track_file, annotations, predictions) {
     var annotator = new Annotator();
 
     const LoadAndDisplayFile = (blob) => {
-      const files = [blob];
-      annotator.files = files;
+      const file = blob;
+      annotator.file = file;
       annotator.loadTask(annotations);
-      
+      annotator.predictions = predictions;
     }
 }
 
