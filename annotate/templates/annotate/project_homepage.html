@@ -3,30 +3,33 @@
 {% block title %}{{ project.name }}{% endblock %}
 
 {% block content %}
-<button type="button" class="btn btn-dark">Upload audio files (TODO)</button>
+<h3> Project {{ project.name }} </h3>
+<a class="btn green waves-effect waves-light {% if not request.user.is_staff %}disabled{% endif %}"
+ href="{% url 'upload_audio' project_id=project.id %}">Upload audio files</a>
+<a class="btn green waves-effect waves-light {% if not request.user.is_staff %}disabled{% endif %}" href="{% url 'upload_pred' project_id=project.id %}">Upload predictions</a>
+<a class="btn green waves-effect waves-light {% if not request.user.is_staff %}disabled{% endif %}" href="{% url 'upload_annotations' project_id=project.id %}">Upload annotations</a>
+<a class="btn green waves-effect waves-light {% if not request.user.is_staff %}disabled{% endif %}" href="{% url 'download_project' project_id=project.id %}">Download annotations</a>
 
-<h1> Project {{ project.name }} </h1>
-<table class="table">
+<table class="table highlight">
   <thead>
     <tr>
       <th scope="col">Name</th>
-      <th scope="col">Annotations</th>
-      <th scope="col">Reviewed</th>
+      <th scope="col">Duration</th>
+      <th scope="col">Annotated by you</th>
+      <th scope="col">Prediction available</th>
+      <th scope="col">Total annotations</th>
     </tr>
   </thead>
   <tbody>
     {% for track in tracks %}
     <tr>
       <td><a href="{% url 'audiotrack_homepage' audiotrack_id=track.id %}"> {{ track.name }}</a></td>
+      <td>{{ track.duration|floatformat }}s</td>
+      <td>{{ track.user_annotation }}</td>
+      <td>{% if track.prediction %}Yes{% else %}No{% endif %}</td>
       <td>{{ track.annotation_count }}</td>
-      <td>TODO</td>
     </tr>
-
     {% endfor %}
-
-
   </tbody>
-
 </table>
-
 {% endblock %}

@@ -3,30 +3,44 @@
 {% block title %}Annotations{% endblock %}
 
 {% block content %}
-<a href="{% url 'project_homepage' project_id=track.project.id %}"> {{ track.project.name }}</a>
-
-<h3>Annotations for {{ track.name }}</h3>
-
-<a href="{% url 'annotate' audiotrack_id=track.id annotation_id=0 %}">
-  Load an empty annotation file
+<a class="btn btn-small waves-effect waves-light green" href="{% url 'project_homepage' project_id=track.project.id %}">
+  <i class="material-icons left">arrow_back</i>{{ track.project.name }}
 </a>
-<table class="table">
+
+<h3>{{ track.name }}</h3>
+
+<a class="btn waves-effect waves-light green" href="{% url 'annotate' audiotrack_id=track.id annotation_id=0 %}">
+  New annotation
+</a>
+
+<p>Review existing annotations:</p>
+
+<table class="table highlight">
   <thead>
     <tr>
-      <th scope="col">User</th>
-      <th scope="col">Date</th>
+      <th scope="col">Created By</th>
+      <th scope="col">Reviewed</th>
+      <th scope="col">Reviewed By</th>
+      <th scope="col">Action</th>
     </tr>
   </thead>
   <tbody>
     {% for annotation in annotations reversed %}
     <tr>
-      <td><a href="{% url 'annotate' audiotrack_id=annotation.track.id annotation_id=annotation.id %}"> {{ annotation.user }}</a></td>
-      <td>{{ annotation.date_time }}</td>
+      <td>{{ annotation.user }}</td>
+      <td>{{ annotation.reviewed }}</td>
+      <td>{{ annotation.reviewed_by }}</td>
+      <td>
+        <a class="btn green waves-effect waves-light" href="{% url 'annotate' audiotrack_id=annotation.track.id annotation_id=annotation.id %}">
+          {% if request.user == annotation.user %}
+            Modify
+          {% else %}
+            Review
+          {% endif %}
+        </a>
+      </td>
     </tr>
-
     {% endfor %}
-
-
   </tbody>
 
 </table>

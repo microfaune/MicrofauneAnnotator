@@ -16,13 +16,13 @@
 
  // import streamSaver from 'streamsaver';
  // const streamSaver = require('streamsaver');
- const streamSaver = window.streamSaver;
+const streamSaver = window.streamSaver;
 
 function Annotator() {
     this.wavesurfer;
     this.playBar;
-    this.files;
-    this.currentFilesIndex = 0;
+    this.predictions;
+    this.file;
     this.stages;
     this.workflowBtns;
     this.currentTask;
@@ -103,7 +103,7 @@ Annotator.prototype = {
         // Also if the user is suppose to get hidden image feedback, append that component to the page
         this.wavesurfer.on('ready', function () {
             const loader = document.querySelector('.loader');
-            // loader.style.display = "none";
+            loader.style.display = "none";
             my.playBar.update();
             my.stages.updateStage(1);
             my.updateTaskTime();
@@ -111,6 +111,7 @@ Annotator.prototype = {
             if (my.currentTask.feedback === 'hiddenImage') {
                 my.hiddenImage.append(my.currentTask.imgUrl);
             }
+            if (my.predictions) {plotData(my.predictions)};
         });
 
         this.wavesurfer.on('click', function (e) {
@@ -141,9 +142,8 @@ Annotator.prototype = {
             // annotation task if the user is suppose to recieve feedback
             var proximityTags = my.currentTask.proximityTag;
             var annotationTags = my.currentTask.annotationTag;
-            // var tutorialVideoURL = my.currentTask.tutorialVideoURL;
             var alwaysShowTags = my.currentTask.alwaysShowTags;
-            // var instructions = my.currentTask.instructions;
+
             my.stages.reset(
                 proximityTags,
                 annotationTags,
@@ -188,6 +188,8 @@ Annotator.prototype = {
             my.wavesurfer.params.visualization = my.currentTask.visualization; // invisible, spectrogram, waveform
             my.wavesurfer.params.feedback = my.currentTask.feedback; // hiddenImage, silent, notify, none
             my.wavesurfer.load(my.currentTask.url);
+
+            my.wavesurfer.params.minPxPerSec = 40;
         };
 
         if (this.currentTask.feedback !== 'none') {
@@ -206,21 +208,13 @@ Annotator.prototype = {
         }
     },
 
-    // Update the interface with the next task's data
-    loadNextTask: function() {
-        // const audioDirectory = '/static/wav/';
+    // Update the interface with the task's data
+    loadTask: function(annotations) {
         var my = this;
-        console.log('my.files', my.files)
-        console.log('llll', my.currentFilesIndex);
-        console.log('asdf', my.files.length);
-        if (my.currentFilesIndex === my.files.length) {
-          console.log("This is done!")
-        } else {
-          // my.updateFileNumberDisplay();
-          const JSONFeed = fileToJSON(my.files[my.currentFilesIndex]);
-          my.currentTask = JSONFeed.task;
-          my.update();
-        }
+        my.annotations = annotations;
+        const JSONFeed = fileToJSON(my.file);
+        my.currentTask = JSONFeed.task;
+        my.update();
     },
 
     // Collect data about users annotations and submit it to the backend
@@ -326,12 +320,7 @@ Annotator.prototype = {
     },
 
     updateFileNumberDisplay() {
-        console.log(this.files)
-        const indexElement = document.querySelector('.index');
-        const totalFilesElement = document.querySelector('.total-files');
         const filename = document.querySelector('.filename');
-        indexElement.innerHTML = this.currentFilesIndex + 1;
-        totalFilesElement.innerHTML = this.files.length;
         filename.innerHTML = this.filename;
     }
 
@@ -351,43 +340,31 @@ function fileToJSON(file) {
   }
 }
 
-function main() {
-    const filename = document.querySelector('.filename').innerHTML.split('/')[2].split('.')[0];
-    const baseURL = document.querySelector('.baseURL').innerHTML;
-    console.log('filename', filename);
-    console.log('baseURL', baseURL);
-    console.log('url', `${baseURL}/media/${filename}.wav`)
 
-
+function main(track_name, track_file, annotations, predictions) {
     var blob = null;
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", `https://${baseURL}/media/${filename}.wav`);
+    xhr.open("GET", track_file);
     xhr.responseType = "blob";
     xhr.onload = function() {
-        console.log('onload');
         blob = xhr.response;
-        blob.name = `${filename}.wav`;
-        blob.webkitRelativePath = `${filename}.wav`;
+        blob.name = track_name;
+        blob.webkitRelativePath = track_name;
         LoadAndDisplayFile(blob);
+        // if (predictions) {plotData(predictions)};
     }
     xhr.send()
-
 
     // Create all the components
     var annotator = new Annotator();
 
     const LoadAndDisplayFile = (blob) => {
-      const loaderBis = document.querySelector('.loader');
-      // loaderBis.style.display = "none";
-      const files = [blob];
-      console.log(files)
-      annotator.files = files;
-      annotator.loadNextTask();
+      const file = blob;
+      annotator.file = file;
+      annotator.loadTask(annotations);
+      annotator.predictions = predictions;
     }
 }
-
-main();
-
 
 
 // lastModified: 1571509531661
