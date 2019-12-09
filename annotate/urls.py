@@ -28,5 +28,7 @@ urlpatterns = [
     path('project/<int:project_id>/upload', views.upload_tracks,
          name='upload_audio'),
     path('project/<int:project_id>/upload_predictions',
-         views.upload_predictions, name='upload_pred')
+         views.upload_predictions, name='upload_pred'),
+    path('project/<int:project_id>/upload_annotations',
+         views.upload_annotations, name='upload_annotations')
 ]
