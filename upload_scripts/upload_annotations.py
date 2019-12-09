@@ -5,7 +5,7 @@ import os
 
 if __name__ == "__main__":
     json_dump_file = "dump_for_upload.json" 
-    audio_ext = ".wav"
+    audio_ext = ".ogg"
     username = "annotator"
     annotation_dir = "../../data/labelled_json/"
 
