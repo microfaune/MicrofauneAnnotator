@@ -1,3 +1,4 @@
+import json
 import os
 
 from django.http import JsonResponse
@@ -10,7 +11,7 @@ from django.db.models import Count
 from librosa.core import get_duration
 
 from .models import Project, AudioTrack, Annotation
-from .forms import MultipleFileFieldForm
+from .forms import JsonFileForm, MultipleFileFieldForm
 
 
 # Create your views here.
@@ -111,7 +112,7 @@ def save_annotation(request, audiotrack_id):
 
 
 @login_required()
-def upload_files(request, project_id):
+def upload_tracks(request, project_id):
     message = ""
     project = Project.objects.get(id=project_id)
     if request.method == "POST":
@@ -155,3 +156,61 @@ def upload_files(request, project_id):
     form = MultipleFileFieldForm()
     return render(request, 'annotate/upload.html',
                   {'form': form, 'project': project, 'message': message})
+
+
+
+@login_required()
+def upload_predictions(request, project_id):
+    project = Project.objects.get(id=project_id)
+    message = ""
+
+    if request.method == "POST":
+        form = JsonFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            json_file = request.FILES["json_file"]
+            try:
+                with json_file.open("r") as f:
+                    data = json.load(f)
+            except JsonDecodeError:
+                message = "The uploaded json file is not a valid json."
+                data = []
+            if not isinstance(data, list):
+                message = ("The uploaded json file does not contains a "
+                           "list of dicionaries.\n")
+                data = []
+            print(data)
+            success = 0
+            failure = 0
+            for d in data:
+                try:
+                    track = AudioTrack.objects.get(name=d["file"])
+                    print(d["prediction"])
+                    track.prediction = json.dumps(d["prediction"])
+                    print(track.prediction)
+                    track.save()
+                    success += 1
+                except Exception as e:
+                    print(e)
+                    failure += 1            
+            if success:
+                message += (f"{success} prediction(s) succesfully added to the "
+                            "database\n")
+            if failure:
+                message += (f"{failure} prediction(s) failed to be added to the "
+                            "database\n")
+
+    
+    form = JsonFileForm()
+    instructions = (
+        "The upload file must be a valid json. It must contain a list "
+        "of dictionaries with the keys 'file' and 'prediction'. The  "
+        "'file' value should be an audio track name (for example "
+        "'foo.wav') already present in the database. The 'prediction' "
+        " value should be a list of number.")
+       
+    return render(request, 'annotate/upload_json.html',
+                  {"form": form, "project": project,
+                   "title": "Upload predictions",
+                   "instructions": instructions, "message": message})
+
+

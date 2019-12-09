@@ -81,7 +81,7 @@
 			annotations = JSON.parse(annotations);
 		}
 
-		var predictions = '{{ track.predictions | safe }}';
+		var predictions = '{{ track.prediction | safe }}';
 		if (predictions) {
 			predictions = JSON.parse(predictions)
 		}

@@ -6,15 +6,20 @@
 <a class="btn green waves-effect waves-light" href="{% url 'project_homepage' project_id=project.id %}">
 <i class="material-icons left">arrow_back</i>{{ project.name }}
 </a>
-
-<p>{{ message }} </p>
+{% if message %}
+<div class="card-panel">
+  {{ message }}
+</div>
+{% endif %}
+<h3>{{ title }}</h3>
+<p>{{ instructions }} </p>
 <div class="row">
   <div class="col l4 offset-l4 m6 offset-m3 s12 account_form card-panel">
     <form method='post' enctype="multipart/form-data">
       {% csrf_token %}
-      <p>{{ form.file_field }}</p>
+      <p>{{ form.json_file }}</p>
       </br>
-      <button class="btn green waves-effect waves-light margin25" type="submit">Upload files</button>
+      <button class="btn green waves-effect waves-light margin25" type="submit">Upload file</button>
     </form>
   </div>
 </div>

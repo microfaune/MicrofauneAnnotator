@@ -25,6 +25,8 @@ urlpatterns = [
          name="audiotrack_homepage"),
     path('annotate/<int:audiotrack_id>/<int:annotation_id>/', views.annotate,
          name="annotate"),
-    path('project/<int:project_id>/upload', views.upload_files,
-         name='upload_audio')
+    path('project/<int:project_id>/upload', views.upload_tracks,
+         name='upload_audio'),
+    path('project/<int:project_id>/upload_predictions',
+         views.upload_predictions, name='upload_pred')
 ]
