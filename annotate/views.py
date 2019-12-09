@@ -6,7 +6,8 @@ from django.urls import reverse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
-from django.db.models import Count
+from django.db.models import Count, F
+from django.forms.models import model_to_dict
 from django.contrib.auth.models import User
 
 from librosa.core import get_duration
@@ -278,3 +279,29 @@ def upload_annotations(request, project_id):
                   {"form": form, "project": project,
                    "title": "Upload predictions",
                    "instructions": instructions, "message": message})
+
+
+@login_required()
+def download_project(request, project_id):
+    project = model_to_dict(Project.objects.get(id=project_id))
+    tracks = AudioTrack.objects.filter(project_id=project_id).values()
+    annotations = list(Annotation.objects.filter(
+        track__project_id=1).order_by("track_id").annotate(
+        username=F("user__username"), reviewer=F("reviewed_by__username")
+        ).values())
+    ind = 0
+    for t in tracks:
+        t["annotation_set"] = []
+        while ind<len(annotations) and annotations[ind]["track_id"] == t["id"]:
+            t["annotation_set"].append(annotations[ind])
+            ind += 1
+    project["tracks"] = list(tracks)
+    
+    response = JsonResponse(project, json_dumps_params={"indent": 2},
+                            content_type="application/json")
+    response['Content-Disposition'] = ('attachment;'
+                                       f'filename={project["name"]}.json')
+    return response
+
+
+
