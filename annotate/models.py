@@ -56,8 +56,9 @@ class Project(models.Model):
 
 
 class AudioTrack(models.Model):
-    FORMAT_CHOICES = [("wav", "wav"), ("mp3", "mp3"), ("flac", "flac")]
-    name = models.CharField(max_length=100)
+    FORMAT_CHOICES = [("wav", "wav"), ("mp3", "mp3"), ("flac", "flac"),
+                      ("ogg", "ogg")]
+    name = models.CharField(max_length=100, unique=True)
     file = models.FileField(max_length=200)
     format = models.CharField(max_length=10, choices=FORMAT_CHOICES,
                               default="wav")
@@ -72,9 +73,13 @@ class AudioTrack(models.Model):
 class Annotation(models.Model):
     track = models.ForeignKey(AudioTrack, on_delete=models.CASCADE)
     value = models.TextField(validators=[validate_json], default="")
-    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    user = models.ForeignKey(User, null=True, related_name='user',
+                             on_delete=models.SET_NULL)
     reviewed = models.BooleanField(default=False)
-    date_time = models.DateTimeField(auto_now_add=True, blank=True)
+    reviewed_by = models.ForeignKey(User, null=True, blank=True,
+                                    related_name='reviewed_by',
+                                    on_delete=models.SET_NULL)
+    date_time = models.DateTimeField(auto_now=True, blank=True)
 
     def __str__(self):
         return f"{self.track} by {self.user.username}"

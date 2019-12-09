@@ -1,0 +1,27 @@
+main {
+  width: 80%;
+  margin: auto;
+  padding-top: 25px;
+}
+
+.account_form {
+  text-align: center;
+}
+
+.margin25 {
+  margin-bottom: 25px; !important
+}
+
+.loader {
+  width: 128px !important;
+  height: 128px !important;
+}
+
+td {
+  padding: 10px 5px
+}
+
+a.disabled {
+  pointer-events: none;
+  cursor: default;
+}

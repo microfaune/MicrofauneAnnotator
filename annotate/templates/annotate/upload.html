@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Upload{% endblock %}
+
+{% block content %}
+<a class="btn green waves-effect waves-light" href="{% url 'project_homepage' project_id=project.id %}">
+<i class="material-icons left">arrow_back</i>{{ project.name }}
+</a>
+
+<p>{{ message }} </p>
+<div class="row">
+  <div class="col l4 offset-l4 m6 offset-m3 s12 account_form card-panel">
+    <form method='post' enctype="multipart/form-data">
+      {% csrf_token %}
+      <p>{{ form.file_field }}</p>
+      </br>
+      <button class="btn green waves-effect waves-light margin25" type="submit">Upload files</button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

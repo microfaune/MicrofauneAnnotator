@@ -184,9 +184,11 @@ WorkflowBtns.prototype = {
     // Create dom elements for the next and exit btns
     create: function() {
         var my = this;
+
         this.nextBtn = $('<button>', {
-            class: 'btn submit',
-            text: 'SUBMIT & LOAD NEXT RECORDING'
+            id: "submit_annotation",
+            class: 'btn submit green waves-effect waves-light',
+            text: submit_message
         });
         this.nextBtn.click(function () {
             $(my).trigger('submit-annotations');
