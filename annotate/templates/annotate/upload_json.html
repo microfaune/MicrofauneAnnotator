@@ -7,12 +7,12 @@
 <i class="material-icons left">arrow_back</i>{{ project.name }}
 </a>
 {% if message %}
-<div class="card-panel">
+<div class="card-panel" style="white-space: pre-line;">
   {{ message }}
 </div>
 {% endif %}
 <h3>{{ title }}</h3>
-<p>{{ instructions }} </p>
+<p style="white-space: pre-line;">{{ instructions }}</p>
 <div class="row">
   <div class="col l4 offset-l4 m6 offset-m3 s12 account_form card-panel">
     <form method='post' enctype="multipart/form-data">
