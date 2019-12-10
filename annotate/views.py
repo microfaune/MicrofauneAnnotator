@@ -6,7 +6,6 @@ from django.http import JsonResponse, FileResponse
 from django.urls import reverse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from django.conf import settings
 from django.db.models import Count, F
 from django.forms.models import model_to_dict
 from django.contrib.auth.models import User
@@ -43,7 +42,7 @@ def homepage(request):
 def project_homepage(request, project_id):
     project = Project.objects.get(id=project_id)
     tracks = AudioTrack.objects.filter(project_id=project_id).annotate(
-        annotation_count=Count("annotation"))
+        annotation_count=Count("annotation")).order_by("name")
     user_annotations = Annotation.objects.filter(
         track__project=project, user=request.user).values_list("track",
                                                                flat=True)
@@ -123,15 +122,15 @@ def upload_tracks(request, project_id):
                 if f.name in current_files:
                     duplicate += 1
                     continue
-                local_file = os.path.join(settings.MEDIA_ROOT, f.name)
                 with BytesIO() as destination:
                     for chunk in f.chunks():
                         destination.write(chunk)
                     binary_stream = destination.getvalue()
-                try:
-                    duration = get_duration(filename=local_file)
-                except Exception:
-                    duration = 0
+                    destination.seek(0)
+                    try:
+                        duration = get_duration(filename=destination)
+                    except Exception:
+                        duration = 0
 
                 AudioTrack.objects.create(
                     name=f.name,
