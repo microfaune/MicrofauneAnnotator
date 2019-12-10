@@ -42,7 +42,7 @@ def homepage(request):
 def project_homepage(request, project_id):
     project = Project.objects.get(id=project_id)
     tracks = AudioTrack.objects.filter(project_id=project_id).annotate(
-        annotation_count=Count("annotation")).order_by("name")
+        annotation_count=Count("annotation"))..defer("file").order_by("name")
     user_annotations = Annotation.objects.filter(
         track__project=project, user=request.user).values_list("track",
                                                                flat=True)
@@ -273,7 +273,8 @@ def upload_annotations(request, project_id):
 @login_required()
 def download_project(request, project_id):
     project = model_to_dict(Project.objects.get(id=project_id))
-    tracks = AudioTrack.objects.filter(project_id=project_id).values()
+    tracks = AudioTrack.objects.filter(project_id=project_id
+                                       ).defer("file").values()
     annotations = list(Annotation.objects.filter(
         track__project_id=1).order_by("track_id").annotate(
         username=F("user__username"), reviewer=F("reviewed_by__username")
