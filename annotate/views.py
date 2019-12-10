@@ -1,7 +1,8 @@
 import json
 import os
+from io import BytesIO
 
-from django.http import JsonResponse
+from django.http import JsonResponse, FileResponse
 from django.urls import reverse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
@@ -104,16 +105,6 @@ def annotate(request, audiotrack_id, annotation_id):
 
 
 @login_required()
-def save_annotation(request, audiotrack_id):
-    if request.is_ajax():
-        if request.method == 'POST':
-            data = request.POST.get('data', None)
-            print(f'\n\nRaw Data: {data}')
-
-    return HttpResponse({'test': 1}, content_type="application/json")
-
-
-@login_required()
 def upload_tracks(request, project_id):
     message = ""
     project = Project.objects.get(id=project_id)
@@ -133,17 +124,18 @@ def upload_tracks(request, project_id):
                     duplicate += 1
                     continue
                 local_file = os.path.join(settings.MEDIA_ROOT, f.name)
-                with open(local_file, 'wb+') as destination:
+                with BytesIO() as destination:
                     for chunk in f.chunks():
                         destination.write(chunk)
+                    binary_stream = destination.getvalue()
                 try:
                     duration = get_duration(filename=local_file)
-                except Exception as e:
+                except Exception:
                     duration = 0
 
                 AudioTrack.objects.create(
                     name=f.name,
-                    file=os.path.join(settings.MEDIA_URL, f.name),
+                    file=binary_stream,
                     format=os.path.splitext(f.name)[1][1:],
                     project=project,
                     duration=duration)
@@ -160,7 +152,6 @@ def upload_tracks(request, project_id):
                   {'form': form, 'project': project, 'message': message})
 
 
-
 @login_required()
 def upload_predictions(request, project_id):
     project = Project.objects.get(id=project_id)
@@ -173,7 +164,7 @@ def upload_predictions(request, project_id):
             try:
                 with json_file.open("r") as f:
                     data = json.load(f)
-            except JsonDecodeError:
+            except json.JsonDecodeError:
                 message = "The uploaded json file is not a valid json."
                 data = []
             if not isinstance(data, list):
@@ -190,15 +181,14 @@ def upload_predictions(request, project_id):
                     success += 1
                 except Exception as e:
                     print(e)
-                    failure += 1            
+                    failure += 1
             if success:
-                message += (f"{success} prediction(s) successfully added to the "
-                            "database\n")
+                message += (f"{success} prediction(s) successfully added to "
+                            "the database\n")
             if failure:
-                message += (f"{failure} prediction(s) failed to be added to the "
-                            "database\n")
+                message += (f"{failure} prediction(s) failed to be added to "
+                            "the database\n")
 
-    
     form = JsonFileForm()
     instructions = (
         "The uploaded file must be a valid json.\n"
@@ -207,7 +197,7 @@ def upload_predictions(request, project_id):
         "The 'file' value should be an audio track name (for example "
         "'foo.wav') already present in the database.\n"
         "The 'prediction' value should be a list of numbers.")
-       
+
     return render(request, 'annotate/upload_json.html',
                   {"form": form, "project": project,
                    "title": "Upload predictions",
@@ -226,7 +216,7 @@ def upload_annotations(request, project_id):
             try:
                 with json_file.open("r") as f:
                     data = json.load(f)
-            except JsonDecodeError:
+            except json.JsonDecodeError:
                 message = "The uploaded json file is not a valid json."
                 data = []
             if not isinstance(data, list):
@@ -251,18 +241,17 @@ def upload_annotations(request, project_id):
                     success += 1
                 except Exception as e:
                     print(e)
-                    failure += 1            
+                    failure += 1
             if success:
-                message += (f"{success} annotation(s) successfully added to the "
-                            "database\n")
+                message += (f"{success} annotation(s) successfully added to "
+                            "the database\n")
             if duplicate:
                 message += (f"{duplicate} annotation(s) already exists (same "
                             "track and user)\n")
             if failure:
-                message += (f"{failure} annotation(s) failed to be added to the "
-                            "database\n")
+                message += (f"{failure} annotation(s) failed to be added to "
+                            "the database\n")
 
-    
     form = JsonFileForm()
     instructions = (
         "The uploaded file must be a valid json.\n"
@@ -273,8 +262,9 @@ def upload_annotations(request, project_id):
         "The 'username' value should be the username of an user already "
         "present in the database.\n"
         "The 'value' value should be a list of dictionaries in the format "
-        "generated by wavesurfer (with 4 keys: 'id', 'start', 'end', 'annotation').")
-       
+        "generated by wavesurfer (with 4 keys: 'id', 'start', 'end', "
+        "'annotation').")
+
     return render(request, 'annotate/upload_json.html',
                   {"form": form, "project": project,
                    "title": "Upload predictions",
@@ -292,11 +282,12 @@ def download_project(request, project_id):
     ind = 0
     for t in tracks:
         t["annotation_set"] = []
-        while ind<len(annotations) and annotations[ind]["track_id"] == t["id"]:
+        while (ind < len(annotations) and
+               annotations[ind]["track_id"] == t["id"]):
             t["annotation_set"].append(annotations[ind])
             ind += 1
     project["tracks"] = list(tracks)
-    
+
     response = JsonResponse(project, json_dumps_params={"indent": 2},
                             content_type="application/json")
     response['Content-Disposition'] = ('attachment;'
@@ -304,4 +295,9 @@ def download_project(request, project_id):
     return response
 
 
-
+@login_required()
+def get_audio(request, audiotrack):
+    track = AudioTrack.objects.get(name=audiotrack)
+    f = BytesIO(track.file)
+    response = FileResponse(f)
+    return response

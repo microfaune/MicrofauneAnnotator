@@ -20,10 +20,13 @@ class Command(BaseCommand):
 
         project = Project.objects.create(name="CiteU", user=user)
 
-        for audio_file in os.listdir(settings.MEDIA_ROOT):
+        for audio_filename in os.listdir(settings.MEDIA_ROOT):
+            audio_file = os.path.join(settings.MEDIA_ROOT, audio_filename)
+            with open(audio_file, "rb") as f:
+                binary_stream = f.read()
             AudioTrack.objects.create(
-                name=audio_file,
-                file=os.path.join(settings.MEDIA_URL, audio_file),
+                name=audio_filename,
+                file=binary_stream,
                 format="wav",
                 project=project,
                 duration=60)

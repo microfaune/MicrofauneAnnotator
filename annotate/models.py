@@ -59,7 +59,7 @@ class AudioTrack(models.Model):
     FORMAT_CHOICES = [("wav", "wav"), ("mp3", "mp3"), ("flac", "flac"),
                       ("ogg", "ogg")]
     name = models.CharField(max_length=100, unique=True)
-    file = models.FileField(max_length=200)
+    file = models.BinaryField(max_length=10000)
     format = models.CharField(max_length=10, choices=FORMAT_CHOICES,
                               default="wav")
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
