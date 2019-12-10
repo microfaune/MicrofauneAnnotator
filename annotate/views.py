@@ -266,7 +266,7 @@ def upload_annotations(request, project_id):
 
     return render(request, 'annotate/upload_json.html',
                   {"form": form, "project": project,
-                   "title": "Upload predictions",
+                   "title": "Upload annotations",
                    "instructions": instructions, "message": message})
 
 

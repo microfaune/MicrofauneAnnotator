@@ -5,13 +5,11 @@ import os
 from microfaune.detection import RNNDetector
 
 
-
 if __name__ == "__main__":
     track_dir = "../../data/citeU/"
-    json_dump_file = "predictions_{ind}.json"    
+    json_dump_file = "predictions_{ind}.json"
 
     tracks = sorted(glob(os.path.join(track_dir, "*.wav")))
-    
     model = RNNDetector()
 
     data = []
@@ -29,4 +27,3 @@ if __name__ == "__main__":
 
     with open(json_dump_file.format(ind=ind), "w") as f:
         json.dump(data, f)
-
