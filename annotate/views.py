@@ -274,7 +274,7 @@ def upload_annotations(request, project_id):
 def download_project(request, project_id):
     project = model_to_dict(Project.objects.get(id=project_id))
     tracks = AudioTrack.objects.filter(project_id=project_id
-                                       ).defer("file").values()
+                                       ).defer("file", "prediction").values()
     annotations = list(Annotation.objects.filter(
         track__project_id=1).order_by("track_id").annotate(
         username=F("user__username"), reviewer=F("reviewed_by__username")
