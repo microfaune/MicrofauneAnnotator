@@ -9,6 +9,8 @@ from django.conf import settings
 from django.db.models import Count, F
 from django.forms.models import model_to_dict
 from django.contrib.auth.models import User
+from django.core.files.storage import default_storage
+
 
 from librosa.core import get_duration
 
@@ -122,12 +124,12 @@ def upload_tracks(request, project_id):
                 if f.name in current_files:
                     duplicate += 1
                     continue
-                local_file = os.path.join(settings.MEDIA_ROOT, f.name)
-                with open(local_file, 'wb+') as destination:
+
+                with default_storage.open(f.name, 'wb') as destination:
                     for chunk in f.chunks():
                         destination.write(chunk)
                 try:
-                    duration = get_duration(filename=local_file)
+                    duration = get_duration(filename="")
                 except Exception:
                     duration = 0
 
