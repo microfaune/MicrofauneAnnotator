@@ -3,7 +3,7 @@
 {% block title %}Upload{% endblock %}
 
 {% block content %}
-<a class="btn green waves-effect waves-light" href="{% url 'project_homepage' project_id=project.id %}">
+<a class="btn grey darken-4 waves-effect waves-light" href="{% url 'project_homepage' project_id=project.id %}">
 <i class="material-icons left">arrow_back</i>{{ project.name }}
 </a>
 
@@ -14,7 +14,7 @@
       {% csrf_token %}
       <p>{{ form.file_field }}</p>
       </br>
-      <button class="btn green waves-effect waves-light margin25" type="submit">Upload files</button>
+      <button class="btn grey darken-4 waves-effect waves-light margin25" type="submit">Upload files</button>
     </form>
   </div>
 </div>
