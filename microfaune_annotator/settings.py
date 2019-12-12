@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
+from google.oauth2 import service_account
 import os
 import django_heroku
 
@@ -135,6 +136,21 @@ else:
         'microfaune_annotator.gcloud.GoogleCloudMediaFileStorage')
     GS_PROJECT_ID = 'gifted-honor-259919'
     GS_MEDIA_BUCKET_NAME = 'microfaune-recordings'
+    service_account_info = {
+      "type": "service_account",
+      "project_id": GS_PROJECT_ID,
+      "client_email": "auth-ml2@gifted-honor-259919.iam.gserviceaccount.com",
+      "client_id": "101163092272470573389",
+      "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+      "token_uri": "https://oauth2.googleapis.com/token",
+      "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+      "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/auth-ml2%40gifted-honor-259919.iam.gserviceaccount.com",
+      "private_key_id": os.getenv("GS_KEY_ID"),
+      "private_key": os.getenv("GS_KEY").replace('\\n', '\n')
+    }
+    GS_CREDENTIALS = service_account.Credentials.from_service_account_info(
+        service_account_info)
+
     MEDIA_URL = f'https://storage.googleapis.com/{GS_MEDIA_BUCKET_NAME}/'
 
 # my_project/settings.py
