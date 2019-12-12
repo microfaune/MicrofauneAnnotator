@@ -148,7 +148,6 @@ else:
       "private_key_id": os.getenv("GS_KEY_ID"),
       "private_key": os.getenv("GS_KEY").replace('\\n', '\n')
     }
-    print(service_account_info)
     GS_CREDENTIALS = service_account.Credentials.from_service_account_info(
         service_account_info)
 

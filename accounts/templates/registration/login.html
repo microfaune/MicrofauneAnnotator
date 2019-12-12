@@ -9,14 +9,14 @@
     <form method="post">
       {% csrf_token %}
       {{ form.as_p }}
-      <button class="btn grey darken-4 waves-effect waves-light margin25" type="submit">Login</button>
+      <button class="btn grey darken-3 waves-effect waves-light margin25" type="submit">Login</button>
     </form>
   </div>
 </div>
 <div class="row">
   <div class="col l4 offset-l4 m6 offset-m3 s12 account_form card-panel">
       <h4>Sign Up</h4>
-      <a class="btn grey darken-4 waves-effect waves-light margin25" href="{% url 'signup' %}">Sign up</a>
+      <a class="btn grey darken-3 waves-effect waves-light margin25" href="{% url 'signup' %}">Sign up</a>
   </div>
 </div>
 {% endblock %}

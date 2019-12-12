@@ -18,7 +18,7 @@ To deploy it the following steps must be followed:
 heroku buildpacks:set heroku/python
 heroku buildpacks:add --index 1 heroku-community/apt
 ```
-* Push the branch *heroku* to master on heroku server: `git push heroku heroku:master`
+* Push the branch *heroku_gs* to master on heroku server: `git push heroku heroku_gs:master`
 * Create the database: `heroku run python manage.py migrate`
 * Create a superuser: `heroku run python manage.py createsuperuser`
 
