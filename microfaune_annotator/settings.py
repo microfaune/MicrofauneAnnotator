@@ -24,6 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'os3i!h@lijzfjl%_hb9xkqo-w&0e6q4#yh7v&s@hsi2uk@18(_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+LOCAL = False
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -122,13 +123,19 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
-
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+if LOCAL:
+    MEDIA_URL = "/media/"
+    MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+else:
+    DEFAULT_FILE_STORAGE = (
+        'microfaune_annotator.gcloud.GoogleCloudMediaFileStorage')
+    GS_PROJECT_ID = 'gifted-honor-259919'
+    GS_MEDIA_BUCKET_NAME = 'microfaune-recordings'
+    MEDIA_URL = f'https://storage.googleapis.com/{GS_MEDIA_BUCKET_NAME}/'
 
 # my_project/settings.py
 LOGIN_URL = 'login'

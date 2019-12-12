@@ -211,20 +211,6 @@ Annotator.prototype = {
         }
     },
 
-    fileToJSON(file) {
-      return {
-          "task": {
-              "feedback": "none",
-              "visualization": "spectrogram",
-              "proximityTag": [],
-              "annotationTag": [],
-              "url": `/media/${file.webkitRelativePath}`,
-              "tutorialVideoURL":"",
-              "alwaysShowTags": true
-          }
-      }
-    },
-
     // Make POST request, passing back the content data. On success load in the next task
     post: function (content) {
         console.log('content', content);
@@ -259,7 +245,7 @@ function fileToJSON(file) {
           "visualization": "spectrogram",
           "proximityTag": [],
           "annotationTag": ["bird"],
-          "url": `/media/${file.webkitRelativePath}`,
+          "url": `${file.webkitRelativePath}`,
           "tutorialVideoURL":"",
           "alwaysShowTags": true
       }
@@ -274,9 +260,8 @@ function main(track_name, track_file, annotations, predictions) {
     xhr.onload = function() {
         blob = xhr.response;
         blob.name = track_name;
-        blob.webkitRelativePath = track_name;
+        blob.webkitRelativePath = track_file;
         LoadAndDisplayFile(blob);
-        // if (predictions) {plotData(predictions)};
     }
     xhr.send()
 
@@ -290,11 +275,3 @@ function main(track_name, track_file, annotations, predictions) {
       annotator.predictions = predictions;
     }
 }
-
-
-// lastModified: 1571509531661
-// lastModifiedDate: Sat Oct 19 2019 20:25:31 GMT+0200 (Central European Summer Time) {}
-// name: "SWIFT_20190723_063009_8.wav"
-// size: 5760044
-// type: "audio/wav"
-// webkitRelativePath: "wav/SWIFT_20190723_063009_8.wav"
