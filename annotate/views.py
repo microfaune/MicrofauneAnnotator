@@ -44,7 +44,7 @@ def homepage(request):
 def project_homepage(request, project_id):
     project = Project.objects.get(id=project_id)
     tracks = AudioTrack.objects.filter(project_id=project_id).annotate(
-        annotation_count=Count("annotation"))
+        annotation_count=Count("annotation")).order_by("name")
     user_annotations = Annotation.objects.filter(
         track__project=project, user=request.user).values_list("track",
                                                                flat=True)
