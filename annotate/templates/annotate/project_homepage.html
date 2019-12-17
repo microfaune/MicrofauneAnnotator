@@ -14,7 +14,7 @@
   <thead>
     <tr>
       <th scope="col">Name</th>
-      <th scope="col">Annotated by</th>
+      <th scope="col">Annotated by you</th>
       <th scope="col">Prediction available</th>
       <th scope="col">Total annotations</th>
     </tr>
@@ -23,7 +23,7 @@
     {% for track in tracks %}
     <tr>
       <td><a href="{% url 'audiotrack_homepage' audiotrack_id=track.id %}"> {{ track.name }}</a></td>
-      <td>{{ track.user }}</td>
+      <td>{{ track.user_annotation }}</td>
       <td>{% if track.prediction %}Yes{% else %}No{% endif %}</td>
       <td>{{ track.annotation_count }}</td>
     </tr>
