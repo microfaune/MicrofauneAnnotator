@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}{{ project.name }}{% endblock %}
 
@@ -10,24 +11,42 @@
 <a class="btn grey darken-3 waves-effect waves-light {% if not request.user.is_staff %}disabled{% endif %}" href="{% url 'upload_annotations' project_id=project.id %}">Upload annotations</a>
 <a class="btn grey darken-3 waves-effect waves-light {% if not request.user.is_staff %}disabled{% endif %}" href="{% url 'download_project' project_id=project.id %}">Download annotations</a>
 
-<table class="table highlight">
-  <thead>
-    <tr>
-      <th scope="col">Name</th>
-      <th scope="col">Annotated by you</th>
-      <th scope="col">Prediction available</th>
-      <th scope="col">Total annotations</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for track in tracks %}
-    <tr>
-      <td><a href="{% url 'audiotrack_homepage' audiotrack_id=track.id %}"> {{ track.name }}</a></td>
-      <td>{{ track.user_annotation }}</td>
-      <td>{% if track.prediction %}Yes{% else %}No{% endif %}</td>
-      <td>{{ track.annotation_count }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+<div class="table-responsive">
+  <table class="table highlight">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Annotated</th>
+        <th scope="col">Reviewed</th>
+        <th scope="col">Annotated by you</th>
+        <th scope="col">Prediction available</th>
+        <th scope="col">Total annotations</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for track in tracks %}
+      <tr>
+        <td><a href="{% url 'audiotrack_homepage' audiotrack_id=track.id %}"> {{ track.name }}</a></td>
+        <td>
+          {% if track.annotation %}
+            <i class="fas fa-check" style="color:#00E64E"></i>
+          {% else %}
+            <i class="fas fa-times" style="color:#F57F53"></i>
+          {% endif %}
+        </td>
+        <td>
+          {% if track.reviewed %}
+            <i class="fas fa-check" style="color:#00E64E"></i>
+          {% else %}
+            <i class="fas fa-times" style="color:#F57F53"></i>
+          {% endif %}
+        </td>
+        <td>{{ track.user_annotation }}</td>
+        <td>{% if track.prediction %}Yes{% else %}No{% endif %}</td>
+        <td>{{ track.annotation_count }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endblock %}
