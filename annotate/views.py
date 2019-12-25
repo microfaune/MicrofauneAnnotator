@@ -51,6 +51,19 @@ def project_homepage(request, project_id):
     for t in tracks:
         t.user_annotation = "Yes" if t.id in user_annotations else "No"
 
+        annotations = Annotation.objects.filter(track_id=t.id)
+
+        if annotations:
+            t.annotation = True
+            ann = Annotation.objects.get(track_id=t.id)
+            if ann.reviewed:
+                t.reviewed = True
+            else:
+                t.reviewed = False
+        else:
+            t.annotation = False
+            t.reviewed = False
+
     return render(request, "annotate/project_homepage.html",
                   {"project": project,
                    "tracks": tracks})
