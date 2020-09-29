@@ -103,3 +103,7 @@ venv.bak/
 .mypy_cache/
 
 staticfiles/
+
+media/
+annotate/migrations/
+upload_scripts/
