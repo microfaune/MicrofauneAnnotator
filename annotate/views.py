@@ -21,7 +21,7 @@ from .forms import JsonFileForm, MultipleFileFieldForm
 # Create your views here.
 @login_required()
 def homepage(request):
-    projects = Project.objects.filter(active=True).annotate(
+    projects = Project.objects.filter(active=True, name__in=list(request.user.groups.all())).annotate(
         audiotrack_count=Count("audiotrack")).values("id", "name",
                                                      "audiotrack_count")
     annotations = Annotation.objects.values_list("track__project_id",
