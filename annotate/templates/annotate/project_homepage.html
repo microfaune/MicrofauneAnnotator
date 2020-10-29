@@ -4,11 +4,13 @@
 
 {% block content %}
 <h3> Project {{ project.name }} </h3>
-<a class="btn green waves-effect waves-light {% if not request.user.is_staff %}disabled{% endif %}"
+  <a class="btn green waves-effect waves-light {% if not request.user.is_staff %}disabled{% endif %}"
  href="{% url 'upload_audio' project_id=project.id %}">Upload audio files</a>
 <a class="btn green waves-effect waves-light {% if not request.user.is_staff %}disabled{% endif %}" href="{% url 'upload_pred' project_id=project.id %}">Upload predictions</a>
 <a class="btn green waves-effect waves-light {% if not request.user.is_staff %}disabled{% endif %}" href="{% url 'upload_annotations' project_id=project.id %}">Upload annotations</a>
 <a class="btn green waves-effect waves-light {% if not request.user.is_staff %}disabled{% endif %}" href="{% url 'download_project' project_id=project.id %}">Download annotations</a>
+<a class="btn green waves-effect waves-light {% if not request.user.is_staff %}disabled{% endif %}" href="{% url 'label' project_id=project.id %}">Label annotations</a>
+
 
 <table class="table highlight">
   <thead>

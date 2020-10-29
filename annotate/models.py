@@ -81,5 +81,8 @@ class Annotation(models.Model):
                                     on_delete=models.SET_NULL)
     date_time = models.DateTimeField(auto_now=True, blank=True)
 
+    def toDict(self):
+        return json.loads(self.value)
+
     def __str__(self):
         return f"{self.track} by {self.user.username}"

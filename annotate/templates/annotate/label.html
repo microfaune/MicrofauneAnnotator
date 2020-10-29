@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ project.name }}{% endblock %}
+
+{% block content %}
+<h3> Project {{ project.name }} </h3>
+  <a class="btn green waves-effect waves-light {% if not request.user.is_staff %}disabled{% endif %}"
+ href="{% url 'upload_audio' project_id=project.id %}">Upload audio files</a>
+<a class="btn green waves-effect waves-light {% if not request.user.is_staff %}disabled{% endif %}" href="{% url 'upload_pred' project_id=project.id %}">Upload predictions</a>
+<a class="btn green waves-effect waves-light {% if not request.user.is_staff %}disabled{% endif %}" href="{% url 'upload_annotations' project_id=project.id %}">Upload annotations</a>
+<a class="btn green waves-effect waves-light {% if not request.user.is_staff %}disabled{% endif %}" href="{% url 'download_project' project_id=project.id %}">Download annotations</a>
+<a class="btn green waves-effect waves-light {% if not request.user.is_staff %}disabled{% endif %}" href="{% url 'label' project_id=project.id %}">Label annotations</a>
+
+
+<ul class="collapsible" data-collapsible="expandable">
+    {% for track in tracks %}
+    <li>
+      <div class="collapsible-header card-panel grey lighten-3"><a href="{% url 'audiotrack_homepage' audiotrack_id=track.id %}">{{ track.name }}</a></div>
+      <div class="collapsible-body">
+
+          {% with track.annotation_set.all|first as annotation %}
+          {% for el in annotation.toDict %}
+        <div>
+
+            <a class="waves-effect waves-light btn modal-trigger" onclick=""  href="#modal1" >{{el.id}}</a>
+
+          <div id="modal1" class="modal modal-fixed-footer">
+            <div class="modal-content">
+              <h4>Modal Header</h4>
+              <p>A bunch of text</p>
+            </div>
+            <div class="modal-footer">
+              <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+            </div>
+          </div>
+                </div>
+
+          {% endfor %}
+            {% endwith %}
+      </div>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
+
+
+{% block scripts %}
+<script type="text/javascript">
+console.log("Mars")
+
+document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.modal');
+    var instances = M.Modal.init(elems, options);
+  });
+
+</script>
+
+{% endblock %}

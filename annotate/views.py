@@ -34,6 +34,7 @@ def homepage(request):
         p["annotation_count"] = annotation_counter[p["id"]]
         p["review_count"] = review_counter[p["id"]]
 
+
     return render(request, "annotate/homepage.html",
                   {"projects": projects})
 
@@ -52,6 +53,34 @@ def project_homepage(request, project_id):
     return render(request, "annotate/project_homepage.html",
                   {"project": project,
                    "tracks": tracks})
+
+@login_required()
+def label(request, project_id):
+    project = Project.objects.get(id=project_id)
+    tracks = AudioTrack.objects.filter(project_id=project_id).annotate(
+        annotation_count=Count("annotation"))
+    user_annotations = Annotation.objects.filter(
+        track__project=project, user=request.user).values_list("track",
+                                                               flat=True)
+    for t in tracks:
+        t.user_annotation = "Yes" if t.id in user_annotations else "No"
+
+    print("Marc")
+    annotation = Annotation.objects.filter(track_id=1)[:1]
+    #print(annotation.value.)
+    annotations = {} #
+    for p in Project.objects.all():
+        annotations["idProject"] = p.id
+        annotations["tracks"] = {}
+        AudioTrack.objects.filter(project_id=p.id)
+        annotations
+
+    #({"idProjet" : projectP.idProjet, "idTrack" : idTrack, "idAnnotation" : idAnnotation, "value" : values} for projectP in Project.objects.all(), idTrack in Track.objects.filter(project_id=)) annotation.value
+
+    return render(request, "annotate/label.html",
+                  {"project": project,
+                   "tracks": tracks,
+                   "annotations": "annotations"})
 
 
 @login_required()
@@ -291,3 +320,19 @@ def download_project(request, project_id):
     response['Content-Disposition'] = ('attachment;'
                                        f'filename={project["name"]}.json')
     return response
+
+
+# @login_required()
+# def label(request, project_id):
+#     project = Project.objects.get(id=project_id)
+#     tracks = AudioTrack.objects.filter(project_id=project_id).annotate(
+#         annotation_count=Count("annotation"))
+#     user_annotations = Annotation.objects.filter(
+#         track__project=project, user=request.user).values_list("track",
+#                                                                flat=True)
+#     for t in tracks:
+#         t.user_annotation = "Yes" if t.id in user_annotations else "No"
+#
+#     return render(request, "annotate/upload.html",
+#                   {"project": project,
+#                    "tracks": tracks})

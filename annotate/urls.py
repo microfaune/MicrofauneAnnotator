@@ -16,7 +16,6 @@ Including another URLconf
 from django.urls import path
 from . import views
 
-
 urlpatterns = [
     path('', views.homepage, name="home"),
     path('project/<int:project_id>/', views.project_homepage,
@@ -32,5 +31,7 @@ urlpatterns = [
     path('project/<int:project_id>/upload_predictions',
          views.upload_predictions, name='upload_pred'),
     path('project/<int:project_id>/upload_annotations',
-         views.upload_annotations, name='upload_annotations')
+         views.upload_annotations, name='upload_annotations'),
+    path('project/<int:project_id>/label/', views.label,
+         name="label")
 ]
