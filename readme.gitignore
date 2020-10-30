@@ -42,7 +42,7 @@ eb open
 ====
 GIT:
 ====
-git push git@github.com:W-Alphonse/microfaune_ai.git
+git push git@github.com:W-Alphonse/MicrofauneAnnotator.git
 
 =====================
   Elastic Beanstalk
