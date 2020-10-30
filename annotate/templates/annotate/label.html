@@ -12,7 +12,7 @@
 <a class="btn green waves-effect waves-light {% if not request.user.is_staff %}disabled{% endif %}" href="{% url 'label' project_id=project.id %}">Label annotations</a>
 
 
-<ul class="collapsible" data-collapsible="expandable">
+<ul class="collapsible expandable">
     {% for track in tracks %}
     <li>
       <div class="collapsible-header card-panel grey lighten-3"><a href="{% url 'audiotrack_homepage' audiotrack_id=track.id %}">{{ track.name }}</a></div>
@@ -46,11 +46,17 @@
 
 {% block scripts %}
 <script type="text/javascript">
-console.log("Mars")
+// console.log("Mars")
 
 document.addEventListener('DOMContentLoaded', function() {
+
+    var elem = document.querySelector('.collapsible.expandable');
+    var instance = M.Collapsible.init(elem, {
+      accordion: false
+    });
+
     var elems = document.querySelectorAll('.modal');
-    var instances = M.Modal.init(elems, options);
+    var instances = M.Modal.init(elems);
   });
 
 </script>
