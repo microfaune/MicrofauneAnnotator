@@ -102,6 +102,11 @@ venv.bak/
 # mypy
 .mypy_cache/
 
+# Idea Project
+.idea/
+*.iml
+
+**/*.gitignore
 staticfiles/
 
 # Elastic Beanstalk Files
