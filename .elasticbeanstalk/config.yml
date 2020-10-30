@@ -1,0 +1,25 @@
+branch-defaults:
+  master:
+    environment: null
+    group_suffix: null
+environment-defaults:
+  microfaune-ui:
+    branch: null
+    repository: null
+global:
+  application_name: microfaune-ui
+  branch: null
+  default_ec2_keyname: aws-eb-microfaune
+  default_platform: Python 3.7
+  default_region: us-west-2
+  include_git_submodules: true
+  instance_profile: null
+  platform_name: null
+  platform_version: null
+  profile: null
+  repository: null
+  sc: git
+  workspace_type: Application
+packages:
+  yum:
+    libsndfile: []

@@ -108,8 +108,3 @@ venv.bak/
 
 **/*.gitignore
 staticfiles/
-
-# Elastic Beanstalk Files
-.elasticbeanstalk/*
-!.elasticbeanstalk/*.cfg.yml
-!.elasticbeanstalk/*.global.yml
