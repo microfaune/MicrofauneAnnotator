@@ -1,0 +1,94 @@
+=========
+ Django
+=========
+--> Run Django en Local
+ cd ebdjango
+ python manage.py runserver  # It calls the WSGI server referenced by WSGI_APPLICATION
+
+ -->  Initialize EB to run the current application as django-tutorial using a Python 3.7 kernel
+ex1: eb init -p python-3.7 django-tutorial      # Sets default values for Elastic Beanstalk applications
+ex2: eb init -p python-3.7 MicrofauneAnnotator  # It applies only to the current directory on the current computer
+                                                # It creates ./elasticbeanstalk/config.yml
+
+ --> Create the environment
+ $ eb create django-env
+ $ eb create microfaune-ui-env
+
+
+-->
+ALLOWED_HOSTS = ['eb-django-app-dev.elasticbeanstalk.com']
+eb deploy
+eb open
+
+====
+GIT:
+====
+git push git@github.com:W-Alphonse/microfaune_ai.git
+
+=====================
+  Elastic Beanstalk
+=====================
+### Run the following command to install the Elastic Beanstalk CLI:
+    pip install awsebcli --upgrade --user
+
+### Run Hello World on your local machine
+
+### Deploy and run Hello World on Elastic Beanstalk
+1a - Initialize your EB CLI repository with the eb init command:
+     Create a Beanstalk environment to host the application on:
+     eb init -p python-3.6 hello-world-flask --region eu-west-1
+1b - eb init # Choix d'une clé ssh
+2 - Create a new environment for your application
+    eb create flask-env
+3 - Open your web site with eb open
+    eb open
+4 - To terminate your Elastic Beanstalk environment
+    eb terminate flask-env
+
+# NB: Descripteur de déploiement créée en cours de route (app.yaml ou app.json):
+runtime: python37
+entrypoint: gunicorn -b :8080 application:application
+
+ssh -i /home/haa/.ssh/aws-eb-microfaune ec2-user@52.41.127.223
+
+=====================
+  Troubleshooting
+=====================
+eb status --verbose
+eb health --refresh
+eb logs
+eb console  # to view your enviroment in the browser console
+
+(microfaune_ui) haa@haa-asus:~/pydev/data-for-good/MicrofauneAnnotator$ eb create microfaune-ui
+Creating application version archive "app-7e73-201029_194147".
+Uploading: [##################################################] 100% Done...
+Application microfaune-ui has been created.
+Environment details for: microfaune-ui
+  Application name: microfaune-ui
+  Region: us-west-2
+  Deployed Version: app-7e73-201029_194147
+  Environment ID: e-d2ydefpcug
+  Platform: arn:aws:elasticbeanstalk:us-west-2::platform/Python 3.7 running on 64bit Amazon Linux 2/3.1.2
+  Tier: WebServer-Standard-1.0
+  CNAME: UNKNOWN
+  Updated: 2020-10-29 18:45:03.114000+00:00
+Printing Status:
+2020-10-29 18:45:01    INFO    createEnvironment is starting.
+2020-10-29 18:45:03    INFO    Using elasticbeanstalk-us-west-2-835479088552 as Amazon S3 storage bucket for environment data.
+2020-10-29 18:45:24    INFO    Created security group named: sg-0615743ef36d601ff
+2020-10-29 18:45:39    INFO    Created load balancer named: awseb-e-d-AWSEBLoa-GC2JSPC0ETZK
+2020-10-29 18:45:39    INFO    Created security group named: awseb-e-d2ydefpcug-stack-AWSEBSecurityGroup-13ADOOOSBRSOC
+2020-10-29 18:45:39    INFO    Created Auto Scaling launch configuration named: awseb-e-d2ydefpcug-stack-AWSEBAutoScalingLaunchConfiguration-8Z2UHBKDOWCY
+2020-10-29 18:47:14    INFO    Created Auto Scaling group named: awseb-e-d2ydefpcug-stack-AWSEBAutoScalingGroup-PKWLD2A30TR4
+2020-10-29 18:47:14    INFO    Waiting for EC2 instances to launch. This may take a few minutes.
+2020-10-29 18:47:14    INFO    Created Auto Scaling group policy named: arn:aws:autoscaling:us-west-2:835479088552:scalingPolicy:fae28f5c-dcba-415f-9f10-5b9327a8931d:autoScalingGroupName/awseb-e-d2ydefpcug-stack-AWSEBAutoScalingGroup-PKWLD2A30TR4:policyName/awseb-e-d2ydefpcug-stack-AWSEBAutoScalingScaleDownPolicy-1WSWX0KO71O9V
+2020-10-29 18:47:14    INFO    Created Auto Scaling group policy named: arn:aws:autoscaling:us-west-2:835479088552:scalingPolicy:7b6add12-bd30-48ab-b77b-0d3d61917814:autoScalingGroupName/awseb-e-d2ydefpcug-stack-AWSEBAutoScalingGroup-PKWLD2A30TR4:policyName/awseb-e-d2ydefpcug-stack-AWSEBAutoScalingScaleUpPolicy-C3ZHFUA5YQPY
+2020-10-29 18:47:14    INFO    Created CloudWatch alarm named: awseb-e-d2ydefpcug-stack-AWSEBCloudwatchAlarmLow-6MMKEHOC0K65
+2020-10-29 18:47:14    INFO    Created CloudWatch alarm named: awseb-e-d2ydefpcug-stack-AWSEBCloudwatchAlarmHigh-1KMLGP5AI8DA9
+2020-10-29 18:48:20    ERROR   Instance deployment failed to install application dependencies. The deployment failed.
+2020-10-29 18:48:20    ERROR   Instance deployment failed. For details, see 'eb-engine.log'.
+2020-10-29 18:48:22    ERROR   [Instance: i-0502bbc1efc41768f] Command failed on instance. Return code: 1 Output: Engine execution has encountered an error..
+2020-10-29 18:48:23    INFO    Command execution completed on all instances. Summary: [Successful: 0, Failed: 1].
+2020-10-29 18:49:25    ERROR   Create environment operation is complete, but with errors. For more information, see troubleshooting documentation.
+
+ERROR: ServiceError - Create environment operation is complete, but with errors. For more information, see troubleshooting documentation.
