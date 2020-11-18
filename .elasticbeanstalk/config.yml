@@ -1,6 +1,6 @@
 branch-defaults:
   master:
-    environment: null
+    environment: microfaune-ui
     group_suffix: null
 environment-defaults:
   microfaune-ui:
