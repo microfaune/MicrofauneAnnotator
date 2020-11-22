@@ -26,7 +26,7 @@ SECRET_KEY = 'os3i!h@lijzfjl%_hb9xkqo-w&0e6q4#yh7v&s@hsi2uk@18(_'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['microfaune-ui.eba-u5guha8e.eu-west-3.elasticbeanstalk.com', '127.0.0.1']
+ALLOWED_HOSTS = ['microfaune-ui-env.eba-jqk4muwf.eu-west-3.elasticbeanstalk.com', '127.0.0.1']
 
 # Application definition
 
