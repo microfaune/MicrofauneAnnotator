@@ -1,5 +1,6 @@
 import json
 import os
+import csv
 
 from django.http import JsonResponse
 from django.urls import reverse
@@ -34,7 +35,6 @@ def homepage(request):
         p["annotation_count"] = annotation_counter[p["id"]]
         p["review_count"] = review_counter[p["id"]]
 
-
     return render(request, "annotate/homepage.html",
                   {"projects": projects})
 
@@ -54,6 +54,7 @@ def project_homepage(request, project_id):
                   {"project": project,
                    "tracks": tracks})
 
+
 @login_required()
 def label(request, project_id):
     project = Project.objects.get(id=project_id)
@@ -65,22 +66,32 @@ def label(request, project_id):
     for t in tracks:
         t.user_annotation = "Yes" if t.id in user_annotations else "No"
 
+    list_species = []
+
+    with open('C:\\Users\\MarcKomiBi-AyéfoATSO\\PycharmProjects\\MicrofauneAnnotator\\oiseaux.csv') as f:
+        reader = csv.reader(f, delimiter=';')
+        next(reader, None)  # skip the headers
+        for row in reader:
+            list_species.append(row[0] + " (" + row[2] + ")")
+
     print("Marc")
+    print(list_species[0])
     annotation = Annotation.objects.filter(track_id=1)[:1]
-    #print(annotation.value.)
-    annotations = {} #
+    # print(annotation.value.)
+    annotations = {}  #
     for p in Project.objects.all():
         annotations["idProject"] = p.id
         annotations["tracks"] = {}
         AudioTrack.objects.filter(project_id=p.id)
         annotations
 
-    #({"idProjet" : projectP.idProjet, "idTrack" : idTrack, "idAnnotation" : idAnnotation, "value" : values} for projectP in Project.objects.all(), idTrack in Track.objects.filter(project_id=)) annotation.value
+    # ({"idProjet" : projectP.idProjet, "idTrack" : idTrack, "idAnnotation" : idAnnotation, "value" : values} for projectP in Project.objects.all(), idTrack in Track.objects.filter(project_id=)) annotation.value
 
     return render(request, "annotate/label.html",
                   {"project": project,
                    "tracks": tracks,
-                   "annotations": "annotations"})
+                   "annotations": "annotations",
+                   "list_species" : list_species})
 
 
 @login_required()
@@ -117,7 +128,7 @@ def annotate(request, audiotrack_id, annotation_id):
             return JsonResponse({
                 'response': 'ok',
                 'url': reverse('audiotrack_homepage', args=(audiotrack_id,))
-                }, content_type="application/json")
+            }, content_type="application/json")
 
     if annotation_id == 0:
         return render(request, "annotate/annotate.html",
@@ -305,7 +316,7 @@ def download_project(request, project_id):
     annotations = list(Annotation.objects.filter(
         track__project_id=1).order_by("track_id").annotate(
         username=F("user__username"), reviewer=F("reviewed_by__username")
-        ).values())
+    ).values())
     ind = 0
     for t in tracks:
         t["annotation_set"] = []
@@ -320,7 +331,6 @@ def download_project(request, project_id):
     response['Content-Disposition'] = ('attachment;'
                                        f'filename={project["name"]}.json')
     return response
-
 
 # @login_required()
 # def label(request, project_id):
