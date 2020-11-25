@@ -8,8 +8,6 @@
   <i class="material-icons left">arrow_back</i>{{ track.project.name }}
 </a>
 
-<h3><a href="{% url 'audiotrack_homepage' audiotrack_id=track.id %}">{{ track.name }}</a></h3>
-
 {% if annotation.id is None %}
 <h3>Annotate track:</h3>
 {% elif request.user == annotation.user %}
@@ -82,7 +80,6 @@ Report hesitations/comments <a href="https://docs.google.com/spreadsheets/d/1oUb
 		if (annotations) {
 			annotations = JSON.parse(annotations);
 		}
-
 		var predictions = '{{ track.prediction | safe }}';
 		if (predictions) {
 			predictions = JSON.parse(predictions)
