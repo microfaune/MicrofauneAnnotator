@@ -78,6 +78,7 @@ Report hesitations/comments <a href="https://docs.google.com/spreadsheets/d/1oUb
 	$('document').ready(function() {
 		var track_name = "{{ track.name }}";
 		var track_file = "{{ track.file.name}}";
+		console.log('ggg', track_name, track_file)
 		var annotations = '{{ annotation.value | safe }}';
 		if (annotations) {
 			annotations = JSON.parse(annotations);

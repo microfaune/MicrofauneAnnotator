@@ -10,6 +10,7 @@ django = ">=3.0.7"
 gunicorn = "*"
 librosa = "*"
 django-storages = "*"
+boto3 = "*"
 
 [requires]
 python_version = "3.7"

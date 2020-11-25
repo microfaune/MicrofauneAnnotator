@@ -82,6 +82,7 @@ def audiotrack_homepage(request, audiotrack_id):
 @login_required()
 def annotate(request, audiotrack_id, annotation_id):
     track = AudioTrack.objects.get(id=audiotrack_id)
+    print('------', settings.MEDIA_URL)
 
     if request.is_ajax():
         if request.method == 'POST':
@@ -115,7 +116,7 @@ def annotate(request, audiotrack_id, annotation_id):
 
     return render(request, "annotate/annotate.html",
                   {"track": track,
-                   "annotation": annotation})
+                   "annotation": annotation,})
 
 
 @login_required()
@@ -151,7 +152,7 @@ def upload_tracks(request, project_id):
                     file=os.path.join(settings.MEDIA_URL, f.name),
                     format=os.path.splitext(f.name)[1][1:],
                     project=project,
-                    duration=duration)
+                    duration=0)
                 success += 1
 
             message = f"{success} files successfully uploaded"

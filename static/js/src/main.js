@@ -253,6 +253,7 @@ function fileToJSON(file) {
 }
 
 function main(track_name, track_file, annotations, predictions) {
+    console.log('track_file', track_file)
     var blob = null;
     var xhr = new XMLHttpRequest();
     xhr.open("GET", track_file);
