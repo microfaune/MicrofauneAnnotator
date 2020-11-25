@@ -102,9 +102,6 @@ Annotator.prototype = {
         // annotation stages back to stage 1, update when the user started the task, update the workflow buttons.
         // Also if the user is suppose to get hidden image feedback, append that component to the page
         this.wavesurfer.on('ready', function () {
-            for (const annotation of my.annotations) {
-                my.wavesurfer.addRegion(annotation);
-            }
             const loader = document.querySelector('.loader');
             loader.style.display = "none";
             my.playBar.update();
@@ -154,6 +151,39 @@ Annotator.prototype = {
                 alwaysShowTags
             );
 
+            // set video url
+            // $('#tutorial-video').attr('src', tutorialVideoURL);
+
+            // add instructions
+            // var instructionsContainer = $('#instructions-container');
+            // instructionsContainer.empty();
+            // if (typeof instructions !== "undefined"){
+            //     // $('.modal-trigger').leanModal();
+            //     instructions.forEach(function (instruction, index) {
+            //         if (index==0) {
+            //             // first instruction is the header
+            //             var instr = $('<h4>', {
+            //                 html: instruction
+            //             });
+            //         } else {
+            //             var instr = $('<h6>', {
+            //                 "class": "instruction",
+            //                 html: instruction
+            //             });
+            //         }
+            //         instructionsContainer.append(instr);
+            //     });
+            //     if (!my.instructionsViewed) {
+            //         $('#instructions-modal').openModal();
+            //         my.instructionsViewed = true;
+            //     }
+            // }
+            // else
+            // {
+            //     $('#instructions-container').hide();
+            //     $('#trigger').hide();
+            // }
+
             // Update the visualization type and the feedback type and load in the new audio clip
             my.wavesurfer.params.visualization = my.currentTask.visualization; // invisible, spectrogram, waveform
             my.wavesurfer.params.feedback = my.currentTask.feedback; // hiddenImage, silent, notify, none
@@ -191,6 +221,10 @@ Annotator.prototype = {
     submitAnnotations: function() {
         // Check if all the regions have been labeled before submitting
         if (this.noCheckLabels || this.stages.annotationDataValidationCheck()) {
+            // if (this.sendingResponse) {
+            //     // If it is already sending a post with the data, do nothing
+            //     return;
+            // }
             this.sendingResponse = true;
             // Get data about the annotations the user has created
             var content = {
@@ -207,42 +241,68 @@ Annotator.prototype = {
                 final_solution_shown: this.stages.aboveThreshold()
             };
 
-            this.post(content);
+            // if (this.stages.aboveThreshold()) {
+            //     // If the user is suppose to recieve feedback and got enough of the annotations correct
+            //     // display the city the clip was recorded for 2 seconds and then submit their work
+            //     var my = this;
+            //     this.stages.displaySolution();
+            //     setTimeout(function() {
+            //         my.post(content);
+            //     }, 2000);
+            // } else {
+                this.post(content);
+            // }
         }
-    },
-
-    fileToJSON(file) {
-      return {
-          "task": {
-              "feedback": "none",
-              "visualization": "spectrogram",
-              "proximityTag": [],
-              "annotationTag": [],
-              "url": `/media/${file.webkitRelativePath}`,
-              "tutorialVideoURL":"",
-              "alwaysShowTags": true
-          }
-      }
     },
 
     // Make POST request, passing back the content data. On success load in the next task
     post: function (content) {
         console.log('content', content);
-        $.ajax({
-            url : "",
-            headers: { "X-CSRFToken": $.cookie("csrftoken") },
-            type : "POST",
-            data : {
-                'annotation': JSON.stringify(content.annotations)
-            },
-            success : function(json) {
-                console.log("success");
-                document.location.href = json.url;
-            },
-            error : function(xhr, errmsg, err) {
-                console.log("Something went wrong: ", errmsg);
-            }
-        });
+
+        var my = this;
+        const filename = my.files[my.currentFilesIndex].name;
+        const fileStream = streamSaver.createWriteStream(`${filename}_labeled.json`)
+        // const fileStream = streamSaver.createWriteStream('annotation.json')
+
+        my.currentFilesIndex++
+        if (content.annotations.length > 0) {
+          new Response(JSON.stringify(content.annotations)).body
+            .pipeTo(fileStream)
+            .then(() => {
+              // If the last task had a hiddenImage component, remove it
+              if (my.currentTask.feedback === 'hiddenImage') {
+                  my.hiddenImage.remove();
+              }
+              my.loadNextTask();
+            }, () => {
+              alert('Error: Unable to Submit Annotations');
+            });
+        } else {
+          if (my.currentTask.feedback === 'hiddenImage') {
+              my.hiddenImage.remove();
+          }
+          my.loadNextTask();
+        }
+        // $.ajax({
+        //     type: 'POST',
+        //     url: $.getJSON(postUrl),
+        //     contentType: 'application/json',
+        //     data: JSON.stringify(content.annotations)
+        // })
+        // .done(function(data) {
+        //     // If the last task had a hiddenImage component, remove it
+        //     if (my.currentTask.feedback === 'hiddenImage') {
+        //         my.hiddenImage.remove();
+        //     }
+        //     my.loadNextTask();
+        // })
+        // .fail(function() {
+        //     alert('Error: Unable to Submit Annotations');
+        // })
+        // .always(function() {
+        //     // No longer sending response
+        //     my.sendingResponse = false;
+        // });
     },
 
     updateFileNumberDisplay() {
@@ -259,12 +319,13 @@ function fileToJSON(file) {
           "visualization": "spectrogram",
           "proximityTag": [],
           "annotationTag": ["bird"],
-          "url": `/media/${file.webkitRelativePath}`,
+          "url": `${file.webkitRelativePath}`,
           "tutorialVideoURL":"",
           "alwaysShowTags": true
       }
   }
 }
+
 
 function main(track_name, track_file, annotations, predictions) {
     var blob = null;
@@ -274,9 +335,8 @@ function main(track_name, track_file, annotations, predictions) {
     xhr.onload = function() {
         blob = xhr.response;
         blob.name = track_name;
-        blob.webkitRelativePath = track_name;
+        blob.webkitRelativePath = track_file;
         LoadAndDisplayFile(blob);
-        // if (predictions) {plotData(predictions)};
     }
     xhr.send()
 
@@ -290,11 +350,3 @@ function main(track_name, track_file, annotations, predictions) {
       annotator.predictions = predictions;
     }
 }
-
-
-// lastModified: 1571509531661
-// lastModifiedDate: Sat Oct 19 2019 20:25:31 GMT+0200 (Central European Summer Time) {}
-// name: "SWIFT_20190723_063009_8.wav"
-// size: 5760044
-// type: "audio/wav"
-// webkitRelativePath: "wav/SWIFT_20190723_063009_8.wav"
