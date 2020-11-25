@@ -113,21 +113,21 @@ StageThreeView.prototype = {
             time.show();
         });
 
-        // var tagContainer = $('<div>', {
-        //     class: 'tag_container',
-        // });
+        var tagContainer = $('<div>', {
+            class: 'tag_container',
+        });
 
-        // this.dom = container.append([message, time, tagContainer]);
+        this.dom = container.append([message, time, tagContainer]);
     },
 
     // Replace the proximity and annotation elements with the new elements that contain the
     // tags in the proximityTags and annotationTags lists
-    // updateTagContents: function(proximityTags, annotationTags) {
-    //     $('.tag_container', this.dom).empty();
-    //     var proximity = this.createProximityTags(proximityTags);
-    //     var annotation = this.createAnnotationTags(annotationTags);
-    //     $('.tag_container', this.dom).append([annotation, proximity]);
-    // },
+    updateTagContents: function(proximityTags, annotationTags) {
+        $('.tag_container', this.dom).empty();
+        var proximity = this.createProximityTags(proximityTags);
+        var annotation = this.createAnnotationTags(annotationTags);
+        $('.tag_container', this.dom).append([annotation, proximity]);
+    },
 
     // Create proximity tag elements
     createProximityTags: function(proximityTags) {
@@ -437,6 +437,12 @@ AnnotationStages.prototype = {
                 Message.notifyHint('Double click on a segment to select or deselect it.');
                 this.shownSelectHint = true;
             }
+            if (this.currentStage === 3 && !this.shownTagHint) {
+                // When the user makes a region for the first time, if they have not seen this hint,
+                // alert them on how to annotate a region
+                Message.notifyHint('Select a tag to annotation the segment.');
+                this.shownTagHint = true;
+            }
         }
     },
 
@@ -459,20 +465,20 @@ AnnotationStages.prototype = {
         this.clear();
         // Update all Tags' Contents
         this.alwaysShowTags = alwaysShowTags || false;
-        // this.updateContentsTags(proximityTags, annotationTags);
+        this.updateContentsTags(proximityTags, annotationTags);
         this.usingProximity = proximityTags.length > 0;
         // Update solution set
         this.annotationSolutions = solution.annotations || [];
         this.city = solution.city || '';
     },
 
-    // // Update stage 3 dom with new proximity tags and annotation tags
-    // updateContentsTags: function(proximityTags, annotationTags) {
-    //     this.stageThreeView.updateTagContents(
-    //         proximityTags,
-    //         annotationTags
-    //     );
-    // },
+    // Update stage 3 dom with new proximity tags and annotation tags
+    updateContentsTags: function(proximityTags, annotationTags) {
+        this.stageThreeView.updateTagContents(
+            proximityTags,
+            annotationTags
+        );
+    },
 
     // Event Handler: For online creation mode, in stage 2 the current region's size grows as the audio plays
     updateEndOfRegion: function() {

@@ -4,11 +4,9 @@
 {% block title %}Annotation{% endblock %}
 
 {% block content %}
-<a class="btn btn-small waves-effect waves-light green" href="{% url 'project_homepage' project_id=track.project.id %}">
+<a class="btn btn-small waves-effect waves-light grey darken-3" href="{% url 'project_homepage' project_id=track.project.id %}">
   <i class="material-icons left">arrow_back</i>{{ track.project.name }}
 </a>
-
-<h3><a href="{% url 'audiotrack_homepage' audiotrack_id=track.id %}">{{ track.name }}</a></h3>
 
 {% if annotation.id is None %}
 <h3>Annotate track:</h3>
@@ -17,6 +15,8 @@
 {% else %}
 <h3>Review this Annotation:</h3>
 {% endif %}
+
+Report hesitations/comments <a href="https://docs.google.com/spreadsheets/d/1oUbSqQ_PAFmbAsQeN0CN_YANYQFDC1d6muAY0jVlKk4/edit?folder=0AOEGyyKTDIJNUk9PVA#gid=0" target="_blank">here</a>.
 
 <div class="container"></div>
 <div class="annotation">
@@ -80,7 +80,6 @@
 		if (annotations) {
 			annotations = JSON.parse(annotations);
 		}
-
 		var predictions = '{{ track.prediction | safe }}';
 		if (predictions) {
 			predictions = JSON.parse(predictions)
