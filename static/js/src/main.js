@@ -244,7 +244,7 @@ function fileToJSON(file) {
           "feedback": "none",
           "visualization": "spectrogram",
           "proximityTag": [],
-          "annotationTag": ["bird"],
+          "annotationTag": ["bird", "bird1", "bird2"],
           "url": `${file.webkitRelativePath}`,
           "tutorialVideoURL":"",
           "alwaysShowTags": true
