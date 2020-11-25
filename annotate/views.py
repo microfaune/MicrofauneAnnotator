@@ -21,7 +21,7 @@ from .forms import JsonFileForm, MultipleFileFieldForm
 # Create your views here.
 @login_required()
 def homepage(request):
-    projects = Project.objects.filter(active=True).annotate(
+    projects = Project.objects.annotate(
         audiotrack_count=Count("audiotrack")).values("id", "name",
                                                      "audiotrack_count")
     annotations = Annotation.objects.values_list("track__project_id",
@@ -43,13 +43,26 @@ def homepage(request):
 @login_required()
 def project_homepage(request, project_id):
     project = Project.objects.get(id=project_id)
-    tracks = AudioTrack.objects.filter(project_id=project_id).annotate(
+    tracks = AudioTrack.objects.annotate(
         annotation_count=Count("annotation")).order_by("name")
     user_annotations = Annotation.objects.filter(
         track__project=project, user=request.user).values_list("track",
                                                                flat=True)
     for t in tracks:
         t.user_annotation = "Yes" if t.id in user_annotations else "No"
+
+        annotations = Annotation.objects.filter(track_id=t.id)
+
+        if annotations:
+            t.annotation = True
+            ann = Annotation.objects.get(track_id=t.id)
+            if ann.reviewed:
+                t.reviewed = True
+            else:
+                t.reviewed = False
+        else:
+            t.annotation = False
+            t.reviewed = False
 
     return render(request, "annotate/project_homepage.html",
                   {"project": project,
