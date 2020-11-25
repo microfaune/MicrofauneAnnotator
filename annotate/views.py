@@ -4,7 +4,7 @@ import os
 from django.http import JsonResponse
 from django.urls import reverse
 from django.shortcuts import render
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.db.models import Count, F
 from django.forms.models import model_to_dict
@@ -21,8 +21,7 @@ from .forms import JsonFileForm, MultipleFileFieldForm
 # Create your views here.
 @login_required()
 def homepage(request):
-    print('---------------------------------------------------------------', list(request.user.groups.all()))
-    projects = Project.objects.filter(active=True, name__in=list(request.user.groups.all())).annotate(
+    projects = Project.objects.filter(active=True).annotate(
         audiotrack_count=Count("audiotrack")).values("id", "name",
                                                      "audiotrack_count")
     annotations = Annotation.objects.values_list("track__project_id",
