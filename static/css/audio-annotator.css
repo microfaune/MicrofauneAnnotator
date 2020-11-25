@@ -312,3 +312,8 @@ h3 {
 h5 {
   display: none;
 }
+
+
+body > main > div.annotation > div.audio_visual > wave > wave {
+  border-right: 1.3px solid rgb(255, 255, 255) !important;
+}
