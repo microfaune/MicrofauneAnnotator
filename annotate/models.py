@@ -1,9 +1,6 @@
 from django.db import models
 from django.core.exceptions import ValidationError
-from django.contrib.auth.models import User, Group
-from django.db.models.signals import post_save
-
-from django.dispatch import receiver
+from django.contrib.auth.models import User
 
 import json
 from numbers import Number
@@ -41,18 +38,10 @@ def validate_json_list(value):
                               " a number")
 
 
-# Assign user to default group: citeU
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        instance.groups.add(Group.objects.get(name='CiteU'))
-
-
 # Create your models here.
 class Project(models.Model):
     name = models.CharField(max_length=50, unique=True)
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
-    group = models.ForeignKey(Group, null="CiteU", on_delete=models.SET_NULL)
 
     # list of labels separated by commas
     labels = models.CharField(max_length=200,
