@@ -140,12 +140,12 @@ def upload_tracks(request, project_id):
             duplicate = 0
             success = 0
             for f in files:
-                # if not f.name.endswith((".mp3", ".ogg", ".wav", ".flac")):
-                #     non_audio += 1
-                #     continue
-                # if f.name in current_files:
-                #     duplicate += 1
-                #     continue
+                if not f.name.endswith((".mp3", ".ogg", ".wav", ".flac")):
+                    non_audio += 1
+                    continue
+                if f.name in current_files:
+                    duplicate += 1
+                    continue
 
                 # with default_storage.open(f.name, 'wb') as destination:
                 #     for chunk in f.chunks():
