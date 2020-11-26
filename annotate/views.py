@@ -66,7 +66,6 @@ def project_homepage(request, project_id):
 
                 labelized_bird_calls = [x for x in bird_calls if x['annotation'] != '']
                 t.labelized_bird_calls = len(labelized_bird_calls)
-            print(len(labelized_bird_calls))
         else:
             t.annotation = False
             t.reviewed = False
