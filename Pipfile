@@ -10,6 +10,7 @@ django = ">=3.0.7"
 gunicorn = "*"
 django-storages = "*"
 boto3 = "*"
+whitenoise = "*"
 
 [requires]
 python_version = "3.7"
