@@ -16,17 +16,22 @@
     <thead>
       <tr>
         <th scope="col">Name</th>
+        <th scope="col">Bird calls</th>
         <th scope="col">Annotated</th>
         <th scope="col">Reviewed</th>
         <th scope="col">Annotated by you</th>
         <th scope="col">Prediction available</th>
-        <th scope="col">Total annotations</th>
       </tr>
     </thead>
     <tbody>
       {% for track in tracks %}
       <tr>
         <td><a href="{% url 'audiotrack_homepage' audiotrack_id=track.id %}"> {{ track.name }}</a></td>
+        {% if track.bird_calls %}
+        <td>{{ track.labelized_bird_calls }} / {{ track.bird_calls }}</td>
+        {% else %}
+        <td></td>
+        {% endif %}
         <td>
           {% if track.annotation %}
             <i class="fas fa-check" style="color:#00E64E"></i>
@@ -43,7 +48,6 @@
         </td>
         <td>{{ track.user_annotation }}</td>
         <td>{% if track.prediction %}Yes{% else %}No{% endif %}</td>
-        <td>{{ track.annotation_count }}</td>
       </tr>
       {% endfor %}
     </tbody>

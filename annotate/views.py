@@ -60,9 +60,19 @@ def project_homepage(request, project_id):
                 t.reviewed = True
             else:
                 t.reviewed = False
+
+            bird_calls = json.loads(ann.value)
+            bird_calls_num = len(bird_calls)
+            if bird_calls_num > 0:
+                t.bird_calls = bird_calls_num
+
+                labelized_bird_calls = [x for x in bird_calls if x['annotation'] != '']
+                t.labelized_bird_calls = len(labelized_bird_calls)
+            print(len(labelized_bird_calls))
         else:
             t.annotation = False
             t.reviewed = False
+
 
     return render(request, "annotate/project_homepage.html",
                   {"project": project,
