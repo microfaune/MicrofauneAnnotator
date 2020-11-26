@@ -26,7 +26,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv("DEBUG")
 LOCAL = os.getenv("LOCAL")
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [".herokuapp.com"]
 
 
 # Application definition
