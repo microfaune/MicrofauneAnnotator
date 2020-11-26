@@ -8,7 +8,6 @@ verify_ssl = true
 [packages]
 django = ">=3.0.7"
 gunicorn = "*"
-librosa = "*"
 django-storages = "*"
 boto3 = "*"
 

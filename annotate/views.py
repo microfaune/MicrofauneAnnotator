@@ -12,8 +12,6 @@ from django.contrib.auth.models import User
 from django.core.files.storage import default_storage
 
 
-from librosa.core import get_duration
-
 from .models import Project, AudioTrack, Annotation
 from .forms import JsonFileForm, MultipleFileFieldForm
 
@@ -152,10 +150,6 @@ def upload_tracks(request, project_id):
                 with default_storage.open(f.name, 'wb') as destination:
                     for chunk in f.chunks():
                         destination.write(chunk)
-                try:
-                    duration = get_duration(filename="")
-                except Exception:
-                    duration = 0
 
                 AudioTrack.objects.create(
                     name=f.name,
