@@ -26,7 +26,6 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv("DEBUG")
 LOCAL = os.getenv("LOCAL")
 
-ALLOWED_HOSTS = [".herokuapp.com"]
 
 
 # Application definition
@@ -127,12 +126,16 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-if LOCAL == "True":
+if LOCAL == "TRUE":
+    ALLOWED_HOSTS = ["127.0.0.1"]
+
     MEDIA_URL = "/media/"
     MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 else:
+    ALLOWED_HOSTS = [".herokuapp.com"]
+
     # aws settings
     AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
     AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
