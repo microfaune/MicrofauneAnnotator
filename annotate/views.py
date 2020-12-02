@@ -301,6 +301,7 @@ def download_project(request, project_id):
         t["annotation_set"] = []
         while (ind < len(annotations) and
                annotations[ind]["track_id"] == t["id"]):
+            print('-------------', ind)
             t["annotation_set"].append(annotations[ind])
             ind += 1
     project["tracks"] = list(tracks)
@@ -310,3 +311,5 @@ def download_project(request, project_id):
     response['Content-Disposition'] = ('attachment;'
                                        f'filename={project["name"]}.json')
     return response
+
+

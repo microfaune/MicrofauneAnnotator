@@ -135,6 +135,7 @@ if LOCAL == "TRUE":
     MEDIA_URL = "/media/"
     MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 else:
+    print('not local!')
     ALLOWED_HOSTS = [".herokuapp.com"]
 
     # aws settings
