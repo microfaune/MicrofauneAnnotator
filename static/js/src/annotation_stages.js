@@ -339,6 +339,8 @@ AnnotationStages.prototype = {
         if (this.currentRegion) {
             this.currentRegion.update({drag: false, resize: false});
             $(this.currentRegion.element).removeClass('current_region');
+            $(this.currentRegion.element).addClass('unselected_region');
+
             $(this.currentRegion.annotationLabel.element).removeClass('current_label');
 
             // Remove the highlated label and disable.
@@ -356,6 +358,8 @@ AnnotationStages.prototype = {
             } else if (newStage === 3) {
                 region.update({drag: true, resize: true});
                 $(region.element).addClass('current_region');
+                $(region.element).removeClass('unselected_region');
+
                 $(region.annotationLabel.element).addClass('current_label');
             }
         }
@@ -753,8 +757,12 @@ AnnotationStages.prototype = {
     // Event Handler: triggered when region is first started to be created, adds action to event list
     trackBeginingOfRegionCreation: function(region) {
         this.trackEvent('start-to-create', region.id);
-        $(region.element).addClass('current_region');
-        $(region.annotationLabel.element).addClass('current_label');
+        // commented to avoid default selected
+        // $(region.element).addClass('current_region');
+        // $(region.annotationLabel.element).addClass('current_label');
+
+        $(region.element).addClass('unselected_region');
+
     },
 
     // Event Handler: triggered when region is first started to be created

@@ -10,10 +10,10 @@
 }
 
 .labels {
-  height: 30px;
+  height: 50px;
 }
 .labels > label_container {
-  height: 30px !important;
+  height: 50px !important;
 }
 
 .btn {
@@ -206,6 +206,7 @@
 tag.current_label {
   z-index: 5000 !important;
   background-color: #00B1B9 !important;
+
 }
 
 .hint {
@@ -317,3 +318,19 @@ h5 {
 body > main > div.annotation > div.audio_visual > wave > wave {
   border-right: 1.3px solid rgb(255, 255, 255) !important;
 }
+
+
+
+
+.name-in-box {
+  position: relative;
+  color: black;
+  top: -20px;
+  overflow: visible;
+  left: -20px;
+}
+
+.unselected_region {
+  border: 2px solid rgb(124, 124, 124);
+}
+

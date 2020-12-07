@@ -199,6 +199,8 @@ WaveSurfer.Label = {
     render: function() {
         var labelEl = document.createElement('tag');
 
+        this.container.className = 'container-boxes'
+
         this.element = this.container.appendChild(labelEl);
         this.style(this.element, {
             position: 'absolute',
@@ -208,9 +210,8 @@ WaveSurfer.Label = {
             padding: '0px 5px',
             borderRadius: '2px',
             fontSize: '12px',
-            textTransform: 'uppercase',
             textOverflow: 'ellipsis',
-            overflow: 'hidden'
+            overflow: 'visible'
         });
 
         // Add play button inside the label
@@ -223,6 +224,7 @@ WaveSurfer.Label = {
 
         this.text = this.element.appendChild(document.createElement('span'));
         this.text.innerHTML = '?';
+        this.text.className = 'name-in-box';
 
         // add delete region to the right
         this.deleteRegion = labelEl.appendChild(document.createElement('i'));
