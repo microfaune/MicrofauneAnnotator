@@ -238,13 +238,71 @@ Annotator.prototype = {
 
 };
 
+
+const bird_names = [
+    "",
+    "Accenteur mouchet (Prunella modularis)",
+    "Bergeronnette grise (Motacilla alba)",
+    "Canard colvert (Anas platyrhynchos)",
+    "Chardonneret elegant (Carduelis carduelis)",
+    "Corneille noire (Corvus corone)",
+    "Epervier d'europe (Accipiter nisus)",
+    "Etourneau sansonnet (Sturnus vulgaris)",
+    "Faucon crecerelle (Falco tinnunculus)",
+    "Faucon hobereau (Falco subbuteo)",
+    "Fauvette a tete noire (Sylvia atricapilla)",
+    "Geai des chenes (Garrulus glandarius)",
+    "Gobemouche gris (Muscicapa striata)",
+    "Gobemouche noir (Ficedula hypoleuca)",
+    "Goeland argente (Larus argentatus)",
+    "Grimpereau des jardins (Certhia brachydactyla)",
+    "Grive draine (Turdus viscivorus)",
+    "Grive litorne (Turdus pilaris)",
+    "Grive mauvis (Turdus iliacus)",
+    "Grive musicienne (Turdus philomelos)",
+    "Heron cendre (Ardea cinerea)",
+    "Hirondelle rustique (Hirundo rustica)",
+    "Hypolais polyglotte (Hippolais polyglotta)",
+    "Martinet noir (Apus apus)",
+    "Merle noir (Turdus merula)",
+    "Mesange a longue queue (Aegithalos caudatus)",
+    "Mesange bleue (Cyanistes caeruleus)",
+    "Mesange charbonniere (Parus major)",
+    "Mesange huppee (Lophophanes cristatus)",
+    "Mesange noire (Periparus ater)",
+    "Moineau domestique (Passer domesticus)",
+    "Moineau friquet (Passer montanus)",
+    "Mouette rieuse (Chroicocephalus ridibundus)",
+    "Perruche a collier (Psittacula krameri)",
+    "Pic epeiche (Dendrocopos major)",
+    "Pic epeichette (Dryobates minor)",
+    "Pic vert (Picus viridis)",
+    "Pie bavarde (Pica pica)",
+    "Pigeon biset des villes (Columba livia)",
+    "Pigeon colombin (Columba oenas)",
+    "Pigeon ramier (Columba palumbus)",
+    "Pinson des arbres (Fringilla coelebs)",
+    "Pouillot fitis (Phylloscopus trochilus)",
+    "Pouillot veloce (Phylloscopus collybita)",
+    "Roitelet a triple bandeau (Regulus ignicapilla)",
+    "Roitelet huppe (Regulus regulus)",
+    "Rougegorge familier (Erithacus rubecula)",
+    "Rougequeue noir (Phoenicurus ochruros)",
+    "Serin cini (Serinus serinus)",
+    "Sitelle torchepot (Sitta europaea)",
+    "Tourterelle turque (Streptopelia decaocto)",
+    "Troglodyte mignon (Troglodytes troglodytes)",
+    "Verdier d'Europe (Chloris chloris)"
+]
+
+
 function fileToJSON(file) {
   return {
       "task": {
           "feedback": "none",
           "visualization": "spectrogram",
           "proximityTag": [],
-          "annotationTag": ["", "bird", "bird1", "bird2"],
+          "annotationTag": bird_names,
           "url": `${file.webkitRelativePath}`,
           "tutorialVideoURL":"",
           "alwaysShowTags": true
