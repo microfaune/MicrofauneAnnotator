@@ -10,10 +10,10 @@
 }
 
 .labels {
-  height: 50px;
+  height: 100px;
 }
 .labels > label_container {
-  height: 50px !important;
+  height: 100px !important;
 }
 
 .btn {
@@ -326,8 +326,13 @@ body > main > div.annotation > div.audio_visual > wave > wave {
   position: relative;
   color: black;
   top: -20px;
-  overflow: visible;
+  overflow: hidden;
+  display: inline-block;
   left: -20px;
+}
+.name-in-box:hover {
+  overflow: visible;
+  top: -40px;
 }
 
 .unselected_region {

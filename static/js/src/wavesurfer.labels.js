@@ -223,8 +223,14 @@ WaveSurfer.Label = {
         });
 
         this.text = this.element.appendChild(document.createElement('span'));
+        console.log(this.text);
         this.text.innerHTML = '?';
         this.text.className = 'name-in-box';
+
+        this.style(this.text, {
+            width: "100%",
+        });
+
 
         // add delete region to the right
         this.deleteRegion = labelEl.appendChild(document.createElement('i'));

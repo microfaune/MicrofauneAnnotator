@@ -240,7 +240,7 @@ Annotator.prototype = {
 
 
 const bird_names = [
-    "",
+    "?",
     "Accenteur mouchet (Prunella modularis)",
     "Bergeronnette grise (Motacilla alba)",
     "Canard colvert (Anas platyrhynchos)",
