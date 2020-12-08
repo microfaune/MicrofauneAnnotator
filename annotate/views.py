@@ -290,6 +290,7 @@ def upload_annotations(request, project_id):
 
 @login_required()
 def download_project(request, project_id):
+    # print('--------------------', project_id)
     project = model_to_dict(Project.objects.get(id=project_id))
     tracks = AudioTrack.objects.filter(project_id=project_id).values()
     annotations = list(Annotation.objects.filter(
@@ -306,10 +307,8 @@ def download_project(request, project_id):
             ind += 1
     project["tracks"] = list(tracks)
 
-    response = JsonResponse(project, json_dumps_params={"indent": 2},
-                            content_type="application/json")
-    response['Content-Disposition'] = ('attachment;'
-                                       f'filename={project["name"]}.json')
+    response = JsonResponse(annotations, json_dumps_params={"indent": 2}, content_type="application/json", safe=False)
+    response['Content-Disposition'] = ('attachment;' f'filename={project["name"]}.json')
     return response
 
 
